@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -352,6 +354,55 @@ public class Form941Controller {
             }
         }
         return "redirect:/form941/step1";
+    }
+
+    @GetMapping(value = "/form941/exportXml", produces = "application/xml")
+    @ResponseBody
+    public ResponseEntity<String> exportIrsXml(@RequestParam(value = "id", required = false) Long formId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return ResponseEntity.status(401).build();
+
+        Form941DTO dto = null;
+        if (formId != null && formId > 0) {
+            dto = form941Service.getFilingDtoByIdAndUserId(formId, userId);
+        } else {
+            dto = (Form941DTO) session.getAttribute("formDTO");
+        }
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String xml = form941Service.generateIrsXml(dto);
+        String fileName = "IRS941_" + (dto.getForm941Id() != null ? dto.getForm941Id() : "Draft") + "_" + (dto.getTaxYear() != null ? dto.getTaxYear() : "2026") + "_Q" + (dto.getQuarter() != null ? dto.getQuarter() : "1") + ".xml";
+
+        return ResponseEntity.ok()
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(org.springframework.http.MediaType.APPLICATION_XML)
+                .body(xml);
+    }
+
+    @GetMapping(value = "/form941/viewXml", produces = "text/xml;charset=UTF-8")
+    @ResponseBody
+    public ResponseEntity<String> viewIrsXml(@RequestParam(value = "id", required = false) Long formId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return ResponseEntity.status(401).build();
+
+        Form941DTO dto = null;
+        if (formId != null && formId > 0) {
+            dto = form941Service.getFilingDtoByIdAndUserId(formId, userId);
+        } else {
+            dto = (Form941DTO) session.getAttribute("formDTO");
+        }
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String xml = form941Service.generateIrsXml(dto);
+        return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.TEXT_XML)
+                .body(xml);
     }
 
     @GetMapping("/filings")

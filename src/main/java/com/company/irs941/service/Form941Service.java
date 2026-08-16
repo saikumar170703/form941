@@ -74,6 +74,26 @@ public class Form941Service {
         return id;
     }
 
+    public String generateIrsXml(Long formId, Long userId) {
+        Form941DTO dto = getFilingDtoByIdAndUserId(formId, userId);
+        if (dto == null) {
+            dto = getFilingDtoById(formId);
+        }
+        return generateIrsXml(dto);
+    }
+
+    public String generateIrsXml(Form941DTO dto) {
+        if (dto == null) return "";
+        try {
+            com.company.irs941.xml.Form941XMLGenerator generator = new com.company.irs941.xml.Form941XMLGenerator(dto);
+            return generator.generateXML();
+        } catch (Exception e) {
+            System.err.println("Form941Service generateIrsXml exception: " + e.getMessage());
+            e.printStackTrace();
+            return "<!-- Error generating IRS MeF XML: " + e.getMessage() + " -->";
+        }
+    }
+
     public int getTotalFilingsCount(Long userId) {
         if (userId == null) return 0;
         return form941Dao.countByUserId(userId);
