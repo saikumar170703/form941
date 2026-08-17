@@ -69,18 +69,20 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                         <td class="text-end">
-                                             <c:choose>
-                                                 <c:when test="${filing.status == 'DRAFT'}">
-                                                     <a href="<%= request.getContextPath() %>/form941/exportXml?id=${filing.form941Id}" class="btn btn-sm btn-outline-secondary rounded-pill px-2 me-1" title="Preview IRS XML">XML 📄</a>
-                                                     <a href="<%= request.getContextPath() %>/form941/resume?id=${filing.form941Id}" class="btn btn-sm btn-primary rounded-pill px-3">Resume Draft &raquo;</a>
-                                                 </c:when>
-                                                 <c:otherwise>
-                                                     <a href="<%= request.getContextPath() %>/form941/exportXml?id=${filing.form941Id}" class="btn btn-sm btn-outline-success rounded-pill px-2 me-1" title="Download IRS MeF XML">XML 💾</a>
-                                                     <a href="<%= request.getContextPath() %>/form941/resume?id=${filing.form941Id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">View Return</a>
-                                                 </c:otherwise>
-                                             </c:choose>
-                                         </td>
+                                          <td class="text-end">
+                                              <c:choose>
+                                                  <c:when test="${filing.status == 'DRAFT'}">
+                                                      <a href="<%= request.getContextPath() %>/form941/exportXml?id=${filing.form941Id}" class="btn btn-sm btn-outline-secondary rounded-pill px-2 me-1" title="Preview IRS XML">XML 📄</a>
+                                                      <a href="<%= request.getContextPath() %>/form941/exportMefPackage?id=${filing.form941Id}" class="btn btn-sm btn-outline-dark rounded-pill px-2 me-1" title="Download MeF ZIP Package">ZIP 📦</a>
+                                                      <a href="<%= request.getContextPath() %>/form941/resume?id=${filing.form941Id}" class="btn btn-sm btn-primary rounded-pill px-3">Resume Draft &raquo;</a>
+                                                  </c:when>
+                                                  <c:otherwise>
+                                                      <a href="<%= request.getContextPath() %>/form941/exportXml?id=${filing.form941Id}" class="btn btn-sm btn-outline-success rounded-pill px-2 me-1" title="Download IRS MeF XML">XML 💾</a>
+                                                      <a href="<%= request.getContextPath() %>/form941/exportMefPackage?id=${filing.form941Id}" class="btn btn-sm btn-outline-primary rounded-pill px-2 me-1" title="Download MeF ZIP Package">ZIP 📦</a>
+                                                      <a href="<%= request.getContextPath() %>/form941/resume?id=${filing.form941Id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">View Return</a>
+                                                  </c:otherwise>
+                                              </c:choose>
+                                          </td>
                                     </tr>
                                 </c:forEach>
                                 <c:if test="${empty filings}">

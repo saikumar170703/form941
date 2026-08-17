@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.company.irs941")
-@PropertySource(value = "classpath:db.properties", ignoreResourceNotFound = true)
+@PropertySource(value = {"classpath:db.properties", "classpath:irs-mef.properties"}, ignoreResourceNotFound = true)
 public class AppConfig {
 
     @Value("${db.driver:org.postgresql.Driver}")

@@ -94,6 +94,38 @@ public class Form941Service {
         }
     }
 
+    @Autowired(required = false)
+    private com.company.irs941.config.MefConfigProperties mefConfig;
+
+    public String generateMefManifest(Form941DTO dto) {
+        if (dto == null) return "";
+        String formXml = generateIrsXml(dto);
+        String ein = dto.getLineValue("ein");
+        String name = dto.getLineValue("businessName");
+        com.company.irs941.mef.MefManifestBuilder mb = new com.company.irs941.mef.MefManifestBuilder(dto, formXml, ein, name, mefConfig);
+        return mb.buildManifest();
+    }
+
+    public byte[] generateMefZipPackage(Long formId, Long userId) {
+        Form941DTO dto = getFilingDtoByIdAndUserId(formId, userId);
+        if (dto == null) dto = getFilingDtoById(formId);
+        return generateMefZipPackage(dto);
+    }
+
+    public byte[] generateMefZipPackage(Form941DTO dto) {
+        if (dto == null) return new byte[0];
+        try {
+            String formXml = generateIrsXml(dto);
+            String manifestXml = generateMefManifest(dto);
+            com.company.irs941.mef.MefSubmissionPackager packager = new com.company.irs941.mef.MefSubmissionPackager(manifestXml, formXml);
+            return packager.createSubmissionZip();
+        } catch (Exception e) {
+            System.err.println("Form941Service generateMefZipPackage exception: " + e.getMessage());
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
+
     public int getTotalFilingsCount(Long userId) {
         if (userId == null) return 0;
         return form941Dao.countByUserId(userId);

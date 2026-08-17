@@ -405,6 +405,55 @@ public class Form941Controller {
                 .body(xml);
     }
 
+    @GetMapping(value = "/form941/exportMefPackage", produces = "application/zip")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportMefPackage(@RequestParam(value = "id", required = false) Long formId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return ResponseEntity.status(401).build();
+
+        Form941DTO dto = null;
+        if (formId != null && formId > 0) {
+            dto = form941Service.getFilingDtoByIdAndUserId(formId, userId);
+        } else {
+            dto = (Form941DTO) session.getAttribute("formDTO");
+        }
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] zipBytes = form941Service.generateMefZipPackage(dto);
+        String fileName = "IRS941_MeF_Package_" + (dto.getForm941Id() != null ? dto.getForm941Id() : "Draft") + ".zip";
+
+        return ResponseEntity.ok()
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentType(org.springframework.http.MediaType.parseMediaType("application/zip"))
+                .body(zipBytes);
+    }
+
+    @GetMapping(value = "/form941/exportManifest", produces = "application/xml")
+    @ResponseBody
+    public ResponseEntity<String> exportManifest(@RequestParam(value = "id", required = false) Long formId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return ResponseEntity.status(401).build();
+
+        Form941DTO dto = null;
+        if (formId != null && formId > 0) {
+            dto = form941Service.getFilingDtoByIdAndUserId(formId, userId);
+        } else {
+            dto = (Form941DTO) session.getAttribute("formDTO");
+        }
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String manifestXml = form941Service.generateMefManifest(dto);
+        return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.APPLICATION_XML)
+                .body(manifestXml);
+    }
+
     @GetMapping("/filings")
     public String listFilings(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");

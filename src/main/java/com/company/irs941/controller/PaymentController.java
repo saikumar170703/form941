@@ -1,48 +1,57 @@
 package com.company.irs941.controller;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.company.irs941.config.PaymentConfigProperties;
+import com.company.irs941.dto.PaymentRequestDTO;
+import com.company.irs941.service.AuthorizeNetPaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.company.irs941.model.Payment;
-import com.company.irs941.service.PaymentService;
-
+/**
+ * Payment Controller for Authorize.Net Integration
+ */
 @Controller
 public class PaymentController {
 
     @Autowired
-    private PaymentService paymentService;
+    private AuthorizeNetPaymentService paymentService;
 
-    @GetMapping("/payments/list")
-    public String listPayments(Model model) {
-        List<Payment> payments = paymentService.getAllPayments();
-        model.addAttribute("payments", payments);
-        return "payments/list";
+    @Autowired(required = false)
+    private PaymentConfigProperties paymentConfig;
+
+    @PostMapping(value = "/payment/process", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> processPayment(@RequestBody PaymentRequestDTO request, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            Map<String, Object> err = new HashMap<>();
+            err.put("success", false);
+            err.put("message", "User session expired. Please log in again.");
+            return ResponseEntity.status(401).body(err);
+        }
+
+        if (request.getAmount() == null && paymentConfig != null) {
+            request.setAmount(paymentConfig.getFilingFee());
+        }
+
+        Map<String, Object> result = paymentService.processPayment(request, userId);
+        return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/payments/record")
-    public String recordPayment(@RequestParam(value = "form941Id", required = false) Long form941Id,
-                                @RequestParam("paymentType") String paymentType,
-                                @RequestParam("paymentMethod") String paymentMethod,
-                                @RequestParam("amount") BigDecimal amount,
-                                @RequestParam("refNumber") String refNumber,
-                                HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        Payment p = new Payment();
-        p.setForm941Id(form941Id != null ? form941Id : 1L);
-        p.setPaymentType(paymentType);
-        p.setPaymentMethod(paymentMethod);
-        p.setAmount(amount);
-        p.setTransactionReference(refNumber);
-        paymentService.recordPayment(p, userId != null ? userId : 1L);
-        return "redirect:/payments/list";
+    @GetMapping(value = "/payment/config", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getPaymentConfig() {
+        Map<String, Object> cfg = new HashMap<>();
+        cfg.put("clientKey", (paymentConfig != null) ? paymentConfig.getClientKey() : "CLIENT_KEY_HERE");
+        cfg.put("apiLoginId", (paymentConfig != null) ? paymentConfig.getApiLoginId() : "API_LOGIN_ID_HERE");
+        cfg.put("environment", (paymentConfig != null) ? paymentConfig.getEnvironment() : "SANDBOX");
+        cfg.put("filingFee", (paymentConfig != null) ? paymentConfig.getFilingFee() : new BigDecimal("19.99"));
+        return ResponseEntity.ok(cfg);
     }
 }

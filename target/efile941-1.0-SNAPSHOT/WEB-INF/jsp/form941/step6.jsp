@@ -315,20 +315,140 @@
 
                         <hr class="my-4">
 
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <c:choose>
                                 <c:when test="${formDTO.status == 'SUBMITTED'}">
                                     <a href="<%= request.getContextPath() %>/filings" class="btn btn-outline-secondary px-4">&lt;&lt; Back to Filings</a>
-                                    <span class="badge bg-success-subtle text-success px-4 py-2 fs-6 rounded-pill fw-bold border border-success">✓ Return Submitted & Saved</span>
+                                    <div>
+                                        <a href="<%= request.getContextPath() %>/form941/viewXml?id=${formDTO.form941Id}" target="_blank" class="btn btn-outline-info px-3 me-2">📄 View IRS XML</a>
+                                        <a href="<%= request.getContextPath() %>/form941/exportXml?id=${formDTO.form941Id}" class="btn btn-outline-secondary px-3 me-2">💾 Download IRS XML</a>
+                                        <a href="<%= request.getContextPath() %>/form941/exportMefPackage?id=${formDTO.form941Id}" class="btn btn-primary px-3 me-2">📦 Download MeF ZIP Package</a>
+                                        <span class="badge bg-success-subtle text-success px-4 py-2 fs-6 rounded-pill fw-bold border border-success">✓ Return Submitted & Saved</span>
+                                    </div>
                                 </c:when>
                                 <c:otherwise>
                                     <a href="<%= request.getContextPath() %>/form941/step5" class="btn btn-outline-secondary px-4">&lt;&lt; Edit Form</a>
                                     <div>
+                                        <a href="<%= request.getContextPath() %>/form941/viewXml" target="_blank" class="btn btn-outline-info px-3 me-2">📄 Preview XML</a>
+                                        <a href="<%= request.getContextPath() %>/form941/exportMefPackage" class="btn btn-outline-dark px-3 me-2">📦 MeF ZIP Package</a>
                                         <a href="<%= request.getContextPath() %>/dashboard" class="btn btn-outline-primary px-4 me-2">Save Draft & Exit</a>
+                                        <button type="button" class="btn btn-primary px-4 me-2 fw-bold" data-bs-toggle="modal" data-bs-target="#authorizeNetPaymentModal">💳 Pay Filing Fee ($19.99)</button>
                                         <button type="submit" class="btn btn-success px-5 py-2 fw-bold" style="font-size: 1.05rem;">Submit Return to IRS</button>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTHORIZE.NET PAYMENT MODAL -->
+    <div class="modal fade" id="authorizeNetPaymentModal" tabindex="-1" aria-labelledby="authNetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-dark text-white py-3 px-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold mb-0" id="authNetModalLabel">Authorize.Net Secure Payment</h5>
+                            <small class="text-muted">Form 941 E-Filing Processing Fee</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4 bg-light">
+                    <!-- Alert Box -->
+                    <div id="paymentAlert" class="alert alert-danger d-none rounded-3" role="alert"></div>
+                    <div id="paymentSuccessAlert" class="alert alert-success d-none rounded-3" role="alert"></div>
+
+                    <!-- Payment Summary Box -->
+                    <div class="card border-0 rounded-3 shadow-sm mb-4 bg-white">
+                        <div class="card-body p-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted d-block small text-uppercase fw-bold">Service Fee</span>
+                                <span class="fw-bold text-dark fs-6">Form 941 Electronic Filing Fee</span>
+                            </div>
+                            <div class="text-end">
+                                <span class="fs-4 fw-bold text-primary font-monospace">$19.99</span>
+                                <small class="text-muted d-block">USD</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Details Form -->
+                    <form id="authorizeNetCardForm" onsubmit="submitAuthorizeNetPayment(event)">
+                        <input type="hidden" id="authForm941Id" value="${formDTO.form941Id}" />
+
+                        <div class="p-3 bg-white border rounded-3 shadow-sm mb-3">
+                            <h6 class="fw-bold text-dark mb-3">Cardholder & Payment Information</h6>
+
+                            <div class="mb-3">
+                                <label for="cardholderName" class="form-label small fw-bold text-muted">Cardholder Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-lg fs-6" id="cardholderName" placeholder="e.g. John Smith" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label small fw-bold text-muted">Credit / Debit Card Number <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0" id="cardBrandIcon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                    </span>
+                                    <input type="text" class="form-control form-control-lg fs-6 border-start-0 font-monospace" id="cardNumber" placeholder="4532 •••• •••• 8892" maxlength="19" oninput="formatCreditCardNumber(this)" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="cardExp" class="form-label small fw-bold text-muted">Expiration Date (MM / YY) <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg fs-6 font-monospace" id="cardExp" placeholder="MM / YY" maxlength="7" oninput="formatCardExp(this)" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cardCvv" class="form-label small fw-bold text-muted">Security Code (CVV) <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control form-control-lg fs-6 font-monospace" id="cardCvv" placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Billing Address -->
+                        <div class="p-3 bg-white border rounded-3 shadow-sm mb-4">
+                            <h6 class="fw-bold text-dark mb-3">Billing Address</h6>
+                            <div class="mb-3">
+                                <label for="billAddress" class="form-label small fw-bold text-muted">Street Address</label>
+                                <input type="text" class="form-control" id="billAddress" placeholder="e.g. 123 Business Way">
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md-5">
+                                    <label for="billCity" class="form-label small fw-bold text-muted">City</label>
+                                    <input type="text" class="form-control" id="billCity" placeholder="City">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="billState" class="form-label small fw-bold text-muted">State</label>
+                                    <input type="text" class="form-control text-uppercase" id="billState" maxlength="2" placeholder="LA">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="billZip" class="form-label small fw-bold text-muted">ZIP Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control font-monospace" id="billZip" placeholder="70112" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center text-muted small">
+                                <svg class="me-1 text-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                256-bit SSL Encrypted via Authorize.Net Gateway
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary px-4 me-2 rounded-3" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" id="btnPaySubmit" class="btn btn-success px-4 rounded-3 fw-bold">
+                                    <span id="payBtnSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                                    Pay $19.99 & Submit
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -447,6 +567,116 @@
                 }
             });
         });
+
+        function formatCreditCardNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += value[i];
+            }
+            input.value = formatted.trim();
+        }
+
+        function formatCardExp(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                input.value = value.substring(0, 2) + ' / ' + value.substring(2, 4);
+            } else {
+                input.value = value;
+            }
+        }
+
+        function submitAuthorizeNetPayment(event) {
+            event.preventDefault();
+
+            const alertBox = document.getElementById('paymentAlert');
+            const successBox = document.getElementById('paymentSuccessAlert');
+            const btnPay = document.getElementById('btnPaySubmit');
+            const spinner = document.getElementById('payBtnSpinner');
+
+            alertBox.classList.add('d-none');
+            successBox.classList.add('d-none');
+
+            const cardholderName = document.getElementById('cardholderName').value.trim();
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s+/g, '');
+            const expRaw = document.getElementById('cardExp').value.replace(/\s+/g, '').replace('/', '');
+            const cvv = document.getElementById('cardCvv').value.trim();
+            const form941Id = document.getElementById('authForm941Id').value;
+            const address = document.getElementById('billAddress').value.trim();
+            const city = document.getElementById('billCity').value.trim();
+            const state = document.getElementById('billState').value.trim();
+            const zip = document.getElementById('billZip').value.trim();
+
+            if (cardNumber.length < 13) {
+                alertBox.innerText = 'Please enter a valid credit card number.';
+                alertBox.classList.remove('d-none');
+                return;
+            }
+
+            if (expRaw.length < 4) {
+                alertBox.innerText = 'Please enter a valid expiration date (MM / YY).';
+                alertBox.classList.remove('d-none');
+                return;
+            }
+
+            const expMonth = expRaw.substring(0, 2);
+            const expYear = expRaw.substring(2, 4);
+
+            btnPay.disabled = true;
+            spinner.classList.remove('d-none');
+
+            const payload = {
+                form941Id: parseInt(form941Id) || 0,
+                amount: 19.99,
+                cardNumber: cardNumber,
+                expirationMonth: expMonth,
+                expirationYear: expYear,
+                cvv: cvv,
+                cardholderName: cardholderName,
+                address: address,
+                city: city,
+                state: state,
+                zip: zip
+            };
+
+            fetch('<%= request.getContextPath() %>/payment/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                btnPay.disabled = false;
+                spinner.classList.add('d-none');
+
+                if (data.success) {
+                    successBox.innerHTML = '<strong>✓ Payment Approved via Authorize.Net!</strong><br/>' +
+                        'Transaction ID: <code>' + data.transactionId + '</code> | Auth Code: <code>' + data.authCode + '</code><br/>' +
+                        '<small>' + data.message + '</small>';
+                    successBox.classList.remove('d-none');
+
+                    setTimeout(function() {
+                        const modalEl = document.getElementById('authorizeNetPaymentModal');
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+                        document.querySelector('form[action*="submitInternal"]').submit();
+                    }, 2000);
+
+                } else {
+                    alertBox.innerText = data.message || 'Payment Declined by Authorize.Net.';
+                    alertBox.classList.remove('d-none');
+                }
+            })
+            .catch(err => {
+                btnPay.disabled = false;
+                spinner.classList.add('d-none');
+                alertBox.innerText = 'Connection error processing payment: ' + err;
+                alertBox.classList.remove('d-none');
+            });
+        }
     </script>
 </body>
 
