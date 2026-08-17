@@ -49,4 +49,34 @@ public class DashboardController {
 
         return "dashboard";
     }
+
+    @Autowired(required = false)
+    private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
+    @GetMapping(value = "/health", produces = "application/json")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<Map<String, Object>> healthCheck() {
+        Map<String, Object> health = new HashMap<>();
+        boolean dbUp = false;
+
+        try {
+            if (jdbcTemplate != null) {
+                Integer one = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
+                dbUp = (one != null && one == 1);
+            }
+        } catch (Exception e) {
+            dbUp = false;
+        }
+
+        health.put("status", dbUp ? "UP" : "DOWN");
+        health.put("database", dbUp ? "UP" : "DOWN");
+        health.put("system", "IRS Form 941 MeF Processing System");
+        health.put("timestamp", java.time.Instant.now().toString());
+
+        if (dbUp) {
+            return org.springframework.http.ResponseEntity.ok(health);
+        } else {
+            return org.springframework.http.ResponseEntity.status(503).body(health);
+        }
+    }
 }

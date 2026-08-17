@@ -92,6 +92,17 @@
                         <p class="text-muted small m-0">Sign in to access your Form 941 dashboard</p>
                     </div>
 
+                    <!-- Success Alert -->
+                    <c:if test="${param.registered == 'true' || not empty success}">
+                        <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #ECFDF5; color: #065F46; border-left: 4px solid #10B981 !important;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <span class="small fw-semibold">Account created successfully! Please sign in with your new credentials.</span>
+                        </div>
+                    </c:if>
+
                     <!-- Error Alert -->
                     <c:if test="${not empty error}">
                         <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444 !important;">
@@ -154,7 +165,7 @@
                         <div class="text-center mt-3">
                             <p class="text-muted small m-0" style="font-size: 0.8rem;">
                                 Don't have an account? 
-                                <a href="#" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Create Business Account</a>
+                                <a href="<%= request.getContextPath() %>/register" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Create Business Account</a>
                             </p>
                         </div>
                     </form>

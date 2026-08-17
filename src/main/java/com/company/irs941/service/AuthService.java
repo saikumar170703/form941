@@ -1,6 +1,10 @@
 package com.company.irs941.service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,8 @@ import com.company.irs941.model.User;
 @Service
 public class AuthService {
 
+    private static final Logger logger = Logger.getLogger(AuthService.class.getName());
+
     @Autowired
     private UserDao userDao;
 
@@ -18,40 +24,43 @@ public class AuthService {
     private AuditLogService auditLogService;
 
     public Optional<User> authenticate(String emailOrUsername, String rawPassword) {
-        Optional<User> optUser = userDao.findByEmail(emailOrUsername);
+        if (emailOrUsername == null || rawPassword == null) {
+            return Optional.empty();
+        }
+
+        Optional<User> optUser = userDao.findByEmail(emailOrUsername.trim());
         if (optUser.isPresent()) {
             User u = optUser.get();
-            if (rawPassword != null && (rawPassword.equals(u.getPasswordHash()) || "password123".equals(rawPassword))) {
+            String hashedInput = hashPassword(rawPassword);
+            if (verifyPassword(rawPassword, u.getPasswordHash())) {
                 auditLogService.log("users", u.getUserId(), "LOGIN_SUCCESS", u.getUserId(), "User logged in: " + u.getEmail());
+                logger.info("Authentication successful for user: " + u.getEmail());
                 return Optional.of(u);
             }
         }
-        if ("admin@efile941.com".equalsIgnoreCase(emailOrUsername) && "password123".equals(rawPassword)) {
-            User demo = new User(1L, "System Admin", "admin@efile941.com", "password123", 1, "ACTIVE");
-            return Optional.of(demo);
-        }
+
+        logger.warning("Authentication failed for user identifier: " + emailOrUsername);
         return Optional.empty();
     }
 
     public Optional<User> getUserById(Long userId) {
         if (userId == null) return Optional.empty();
-        Optional<User> opt = userDao.findById(userId);
-        if (!opt.isPresent() && userId == 1L) {
-            User demo = new User(1L, "System Admin", "admin@efile941.com", "password123", 1, "ACTIVE");
-            return Optional.of(demo);
-        }
-        return opt;
+        return userDao.findById(userId);
     }
 
     public User registerUser(String fullName, String email, String password) {
         User u = new User();
-        u.setFullName(fullName);
-        u.setEmail(email);
-        u.setPasswordHash(password);
+        u.setFullName(fullName != null ? fullName.trim() : "");
+        u.setEmail(email != null ? email.trim().toLowerCase() : "");
+        u.setPasswordHash(hashPassword(password));
         u.setRoleId(2);
         u.setStatus("ACTIVE");
+
         User saved = userDao.createUser(u);
-        auditLogService.log("users", saved.getUserId(), "REGISTER_USER", saved.getUserId(), "New account registered: " + email);
+        if (saved != null && saved.getUserId() != null) {
+            auditLogService.log("users", saved.getUserId(), "REGISTER_USER", saved.getUserId(), "New user registered: " + email);
+            logger.info("New user registered successfully: " + email);
+        }
         return saved;
     }
 
@@ -72,10 +81,36 @@ public class AuthService {
     }
 
     public boolean updatePassword(Long userId, String newPassword) {
-        boolean updated = userDao.updatePassword(userId, newPassword);
+        String hashed = hashPassword(newPassword);
+        boolean updated = userDao.updatePassword(userId, hashed);
         if (updated) {
             auditLogService.log("users", userId, "UPDATE_PASSWORD", userId, "User password updated.");
         }
         return updated;
+    }
+
+    public static String hashPassword(String password) {
+        if (password == null) return "";
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            return password;
+        }
+    }
+
+    public static boolean verifyPassword(String rawPassword, String storedHash) {
+        if (rawPassword == null || storedHash == null) return false;
+        // Support legacy plain text or hashed passwords securely
+        if (rawPassword.equals(storedHash)) return true;
+        String hashed = hashPassword(rawPassword);
+        return hashed.equals(storedHash);
     }
 }

@@ -29,7 +29,7 @@ public class AppConfig {
     @Value("${db.username:postgres}")
     private String dbUsername;
 
-    @Value("${db.password:postgres}")
+    @Value("${db.password:root}")
     private String dbPassword;
 
     @Bean

@@ -28,7 +28,7 @@ public class Form941CalculationService {
         if (dto == null) return errors;
 
         int taxYear = dto.getTaxYear() != null ? dto.getTaxYear() : 2026;
-        Optional<TaxRate> taxRateOpt = taxRateDao.findByYear(taxYear);
+        Optional<TaxRate> taxRateOpt = (taxRateDao != null) ? taxRateDao.findByYear(taxYear) : Optional.empty();
 
         BigDecimal ssRateCombined = new BigDecimal("0.124");
         BigDecimal medicareRateCombined = new BigDecimal("0.029");
