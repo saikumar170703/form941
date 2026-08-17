@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.company.irs941")
-@PropertySource(value = {"classpath:db.properties", "classpath:irs-mef.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value = { "classpath:db.properties", "classpath:irs-mef.properties" }, ignoreResourceNotFound = true)
 public class AppConfig {
 
     @Value("${db.driver:org.postgresql.Driver}")
     private String driverClassName;
 
-    @Value("${db.url:jdbc:postgresql://localhost:5432/941_newdb}")
+    @Value("${db.url:jdbc:postgresql://localhost:5432/efile941_db}")
     private String dbUrl;
 
     @Value("${db.username:postgres}")
