@@ -20,16 +20,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource(value = { "classpath:db.properties", "classpath:irs-mef.properties" }, ignoreResourceNotFound = true)
 public class AppConfig {
 
+    static {
+        // Set JVM default TimeZone to UTC to prevent PostgreSQL driver FATAL invalid TimeZone error during connection startup
+        java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("UTC"));
+    }
+
     @Value("${db.driver:org.postgresql.Driver}")
     private String driverClassName;
 
-    @Value("${db.url:jdbc:postgresql://localhost:5432/efile941_db}")
+    @Value("${db.url:jdbc:postgresql://2.29.8.150:10691/efile941_db}")
     private String dbUrl;
 
     @Value("${db.username:postgres}")
     private String dbUsername;
 
-    @Value("${db.password:root}")
+    @Value("${db.password:VHv9XhMXa}")
     private String dbPassword;
 
     @Bean

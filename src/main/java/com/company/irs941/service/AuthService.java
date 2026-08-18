@@ -33,6 +33,11 @@ public class AuthService {
             User u = optUser.get();
             String hashedInput = hashPassword(rawPassword);
             if (verifyPassword(rawPassword, u.getPasswordHash())) {
+                // Auto-upgrade plain text password to SHA-256 hash in DB
+                if (rawPassword.equals(u.getPasswordHash())) {
+                    userDao.updatePassword(u.getUserId(), hashedInput);
+                    u.setPasswordHash(hashedInput);
+                }
                 auditLogService.log("users", u.getUserId(), "LOGIN_SUCCESS", u.getUserId(), "User logged in: " + u.getEmail());
                 logger.info("Authentication successful for user: " + u.getEmail());
                 return Optional.of(u);

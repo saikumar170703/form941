@@ -1,8 +1,10 @@
 com\company\irs941\dao\PaymentDao$1.class
 com\company\irs941\model\TaxYear.class
+com\company\irs941\mef\MefManifestBuilder.class
 com\company\irs941\controller\AuditController.class
 com\company\irs941\model\UserRole.class
 com\company\irs941\dao\UserDao.class
+com\company\irs941\mef\MefSubmissionPackager.class
 com\company\irs941\controller\AccountController.class
 com\company\irs941\model\TaxRate.class
 com\company\irs941\dao\Form941Dao.class
@@ -12,6 +14,8 @@ com\company\irs941\interceptor\AuthInterceptor.class
 com\company\irs941\controller\Form941Controller.class
 com\company\irs941\dao\TaxYearDao.class
 com\company\irs941\model\Form941.class
+com\company\irs941\mef\MefSubmissionPackager$EncryptedSubmission.class
+com\company\irs941\mef\IrsMefTransmissionService.class
 com\company\irs941\model\Employer.class
 com\company\irs941\controller\EmployerController.class
 com\company\irs941\dao\AuditLogDao.class
@@ -19,10 +23,14 @@ com\company\irs941\dao\UserDao$1.class
 com\company\irs941\xml\Form941XMLGenerator.class
 com\company\irs941\model\EFileSubmission.class
 com\company\irs941\dao\EmployerDao.class
+com\company\irs941\config\PaymentConfigProperties.class
+com\company\irs941\mef\IrsMefTransmissionService$MefSubmissionResult.class
+com\company\irs941\service\AuthorizeNetPaymentService.class
 com\company\irs941\service\Form941CalculationService.class
 com\company\irs941\model\User.class
 com\company\irs941\dao\EFileSubmissionDao.class
 com\company\irs941\dao\AuditLogDao$1.class
+com\company\irs941\dto\PaymentRequestDTO.class
 com\company\irs941\service\EFileSubmissionService.class
 com\company\irs941\model\Form941Line.class
 com\company\irs941\model\Form941ScheduleB.class
@@ -46,6 +54,7 @@ com\company\irs941\dto\Form941DTO.class
 com\company\irs941\validator\Form941Validator.class
 com\company\irs941\service\PaymentService.class
 com\company\irs941\model\Form941Detail.class
+com\company\irs941\config\MefConfigProperties.class
 com\company\irs941\validator\Form941Validator$ValidationWarning.class
 com\company\irs941\validator\Form941Validator$ValidationResult.class
 com\company\irs941\controller\AuthController.class

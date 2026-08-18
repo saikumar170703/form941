@@ -1,9 +1,11 @@
 $m2 = "C:\Users\admin\.m2\repository"
 $web_lib = "c:\Users\admin\eclipse-workspace\941_newdb\src\main\webapp\WEB-INF\lib"
-$target_lib = "c:\Users\admin\eclipse-workspace\941_newdb\target\newdb\WEB-INF\lib"
+$target_lib = "c:\Users\admin\eclipse-workspace\941_newdb\target\efile941\WEB-INF\lib"
+$target_lib_legacy = "c:\Users\admin\eclipse-workspace\941_newdb\target\newdb\WEB-INF\lib"
 
 New-Item -ItemType Directory -Force -Path $web_lib
 New-Item -ItemType Directory -Force -Path $target_lib
+New-Item -ItemType Directory -Force -Path $target_lib_legacy
 
 # Find all Tomcat wtpwebapps WEB-INF/lib directories in Eclipse metadata
 $wtp_libs = Get-ChildItem -Path "C:\Users\admin\eclipse-workspace\.metadata\.plugins\org.eclipse.wst.server.core" -Filter "WEB-INF" -Recurse -ErrorAction SilentlyContinue | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty FullName
@@ -30,6 +32,7 @@ foreach ($j in $jars) {
     if ($found) {
         Copy-Item $found.FullName -Destination $web_lib -Force
         Copy-Item $found.FullName -Destination $target_lib -Force
+        Copy-Item $found.FullName -Destination $target_lib_legacy -Force
         foreach ($wtp in $wtp_libs) {
             $wtpLib = Join-Path $wtp "lib"
             if (Test-Path $wtpLib) {
