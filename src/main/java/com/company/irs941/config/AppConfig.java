@@ -17,7 +17,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.company.irs941")
-@PropertySource(value = { "classpath:db.properties", "classpath:irs-mef.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = {
+        "classpath:db.properties",
+        "classpath:irs-mef.properties",
+        // External Linux Configuration (production / staging)
+        "file:/etc/efile941/db.properties",
+        "file:/etc/efile941/irs-mef.properties",
+        // External Windows Configuration (local development)
+        "file:C:/efile941/config/db.properties",
+        "file:C:/efile941/config/irs-mef.properties"
+}, ignoreResourceNotFound = true)
 public class AppConfig {
 
     static {
@@ -28,13 +37,13 @@ public class AppConfig {
     @Value("${db.driver:org.postgresql.Driver}")
     private String driverClassName;
 
-    @Value("${db.url:jdbc:postgresql://2.29.8.150:10691/efile941_db}")
+    @Value("${db.url:jdbc:postgresql://localhost:5432/efile941_db?options=-c%20timezone=UTC}")
     private String dbUrl;
 
     @Value("${db.username:postgres}")
     private String dbUsername;
 
-    @Value("${db.password:VHv9XhMXa}")
+    @Value("${db.password:root}")
     private String dbPassword;
 
     @Bean
