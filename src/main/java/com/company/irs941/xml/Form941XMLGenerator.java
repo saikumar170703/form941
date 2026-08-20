@@ -18,12 +18,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * IRS Form 941 MeF XML Generator
  * Conforms to IRS MeF XSD Schema (attachments/941xsd.txt)
  * Namespace: http://www.irs.gov/efile
  */
 public class Form941XMLGenerator {
+
+    private static final Logger logger = LogManager.getLogger(Form941XMLGenerator.class);
 
     private static final String IRS_NAMESPACE = "http://www.irs.gov/efile";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");

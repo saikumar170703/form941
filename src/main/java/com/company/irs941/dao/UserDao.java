@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +17,7 @@ import com.company.irs941.model.User;
 @Repository
 public class UserDao {
 
-    private static final Logger logger = Logger.getLogger(UserDao.class.getName());
+    private static final Logger logger = LogManager.getLogger(UserDao.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -44,7 +44,7 @@ public class UserDao {
             List<User> users = jdbcTemplate.query(sql, USER_ROW_MAPPER, email);
             return users.stream().findFirst();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error finding user by email: " + email, e);
+            logger.error("Error finding user by email: " + email, e);
             return Optional.empty();
         }
     }
@@ -55,7 +55,7 @@ public class UserDao {
             List<User> users = jdbcTemplate.query(sql, USER_ROW_MAPPER, userId);
             return users.stream().findFirst();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error finding user by id: " + userId, e);
+            logger.error("Error finding user by id: " + userId, e);
             return Optional.empty();
         }
     }
@@ -71,7 +71,7 @@ public class UserDao {
             user.setUserId(id);
             return user;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error creating user: " + user.getEmail(), e);
+            logger.error("Error creating user: " + user.getEmail(), e);
             throw new RuntimeException("Database error creating user account: " + e.getMessage(), e);
         }
     }
@@ -81,7 +81,7 @@ public class UserDao {
             String sql = "UPDATE users SET full_name = ?, email = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
             return jdbcTemplate.update(sql, fullName, email, userId) > 0;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error updating user profile: userId=" + userId, e);
+            logger.error("Error updating user profile: userId=" + userId, e);
             return false;
         }
     }
@@ -91,7 +91,7 @@ public class UserDao {
             String sql = "UPDATE users SET email = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
             return jdbcTemplate.update(sql, newEmail, userId) > 0;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error updating user email: userId=" + userId, e);
+            logger.error("Error updating user email: userId=" + userId, e);
             return false;
         }
     }
@@ -101,7 +101,7 @@ public class UserDao {
             String sql = "UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
             return jdbcTemplate.update(sql, newPasswordHash, userId) > 0;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error updating user password: userId=" + userId, e);
+            logger.error("Error updating user password: userId=" + userId, e);
             return false;
         }
     }

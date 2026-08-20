@@ -12,12 +12,17 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * IRS MeF Submission Packager
  * Packages manifest.xml and form941.xml into standard ZIP archive
  * Supports AES-256 encryption & GZIP compression per attachments/IRS_MeF_SubmissionGuide_Complete.md
  */
 public class MefSubmissionPackager {
+
+    private static final Logger logger = LogManager.getLogger(MefSubmissionPackager.class);
 
     private final String manifestXml;
     private final String form941Xml;

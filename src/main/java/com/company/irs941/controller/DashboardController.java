@@ -6,6 +6,8 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,8 @@ import com.company.irs941.service.Form941Service;
 @Controller
 public class DashboardController {
 
+    private static final Logger logger = LogManager.getLogger(DashboardController.class);
+
     @Autowired
     private Form941Service form941Service;
 
@@ -28,26 +32,35 @@ public class DashboardController {
     @GetMapping({"/", "/dashboard"})
     public String showDashboard(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return "redirect:/login";
-
-        model.addAttribute("totalFilingsCount", form941Service.getTotalFilingsCount(userId));
-        model.addAttribute("inProgressCount", form941Service.getDraftsCount(userId));
-        model.addAttribute("employersCount", employerService.getEmployersCount(userId));
-        model.addAttribute("completedCount", form941Service.getSubmittedCount(userId));
-
-        List<Form941> filings = form941Service.getFilingsByUserId(userId);
-        model.addAttribute("recentFilings", filings);
-
-        List<Employer> employers = employerService.getAllEmployers(userId);
-        model.addAttribute("employers", employers);
-
-        Map<Long, Employer> employerMap = new HashMap<>();
-        for (Employer emp : employers) {
-            employerMap.put(emp.getEmployerId(), emp);
+        if (userId == null) {
+            logger.warn("[DASHBOARD] Session null or expired. Redirecting to /login.");
+            return "redirect:/login";
         }
-        model.addAttribute("employerMap", employerMap);
 
-        return "dashboard";
+        try {
+            logger.info("[DASHBOARD] Loading dashboard for User ID: {}", userId);
+            model.addAttribute("totalFilingsCount", form941Service.getTotalFilingsCount(userId));
+            model.addAttribute("inProgressCount", form941Service.getDraftsCount(userId));
+            model.addAttribute("employersCount", employerService.getEmployersCount(userId));
+            model.addAttribute("completedCount", form941Service.getSubmittedCount(userId));
+
+            List<Form941> filings = form941Service.getFilingsByUserId(userId);
+            model.addAttribute("recentFilings", filings);
+
+            List<Employer> employers = employerService.getAllEmployers(userId);
+            model.addAttribute("employers", employers);
+
+            Map<Long, Employer> employerMap = new HashMap<>();
+            for (Employer emp : employers) {
+                employerMap.put(emp.getEmployerId(), emp);
+            }
+            model.addAttribute("employerMap", employerMap);
+
+            return "dashboard";
+        } catch (Exception e) {
+            logger.error("[DASHBOARD ERROR] Error loading dashboard data for User ID: {}", userId, e);
+            throw e;
+        }
     }
 
     @Autowired(required = false)
@@ -65,6 +78,7 @@ public class DashboardController {
                 dbUp = (one != null && one == 1);
             }
         } catch (Exception e) {
+            logger.error("[HEALTH CHECK ERROR] Database probe failed: {}", e.getMessage(), e);
             dbUp = false;
         }
 
@@ -76,6 +90,7 @@ public class DashboardController {
         if (dbUp) {
             return org.springframework.http.ResponseEntity.ok(health);
         } else {
+            logger.warn("[HEALTH CHECK WARN] Health check returned 503 SERVICE UNCOUNTERED.");
             return org.springframework.http.ResponseEntity.status(503).body(health);
         }
     }

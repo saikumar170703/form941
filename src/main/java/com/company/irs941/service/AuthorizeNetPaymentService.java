@@ -18,12 +18,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Authorize.Net Payment Gateway Service
  * Handles Card Charges (authCaptureTransaction) & Persists Payment Records to Database
  */
 @Service
 public class AuthorizeNetPaymentService {
+
+    private static final Logger logger = LogManager.getLogger(AuthorizeNetPaymentService.class);
 
     private static final String SANDBOX_URL = "https://apitest.authorize.net/xml/v1/request.api";
     private static final String PRODUCTION_URL = "https://api.authorize.net/xml/v1/request.api";

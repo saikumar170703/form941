@@ -34,8 +34,13 @@ import com.company.irs941.model.TaxYear;
 import com.company.irs941.service.EmployerService;
 import com.company.irs941.service.Form941Service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Controller
 public class Form941Controller {
+
+    private static final Logger logger = LogManager.getLogger(Form941Controller.class);
 
     @Autowired
     private Form941Service form941Service;
@@ -54,40 +59,51 @@ public class Form941Controller {
                                       @RequestParam(value = "new", required = false) Boolean isNew,
                                       HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return "redirect:/login";
-
-        if (Boolean.TRUE.equals(isNew)) {
-            session.removeAttribute("formDTO");
+        if (userId == null) {
+            logger.warn("[FORM941 INTERACTIVE] Session null or expired. Redirecting to /login.");
+            return "redirect:/login";
         }
-        if (id != null && id > 0) {
-            Form941DTO dto = form941Service.getFilingDtoByIdAndUserId(id, userId);
-            if (dto != null) {
-                session.setAttribute("formDTO", dto);
+
+        try {
+            logger.info("[FORM941 INTERACTIVE] Opening form941/interactive for User ID: {}, Form ID: {}, isNew: {}", 
+                    userId, id, isNew);
+
+            if (Boolean.TRUE.equals(isNew)) {
+                session.removeAttribute("formDTO");
             }
-        }
-        Form941DTO dto = getOrCreateDTO(session);
-
-        if (dto.getEmployerId() == null || dto.getEmployerId() <= 0) {
-            List<Employer> employers = employerService.getAllEmployers(userId);
-            if (!employers.isEmpty()) {
-                dto.setEmployerId(employers.get(0).getEmployerId());
+            if (id != null && id > 0) {
+                Form941DTO dto = form941Service.getFilingDtoByIdAndUserId(id, userId);
+                if (dto != null) {
+                    session.setAttribute("formDTO", dto);
+                }
             }
-        }
+            Form941DTO dto = getOrCreateDTO(session);
 
-        if (dto.getEmployerId() != null && dto.getEmployerId() > 0) {
-            employerService.getEmployerByIdAndUserId(dto.getEmployerId(), userId).ifPresent(emp -> {
-                if (dto.getLineValue("ein") == null) dto.setLineValue("ein", emp.getEin());
-                if (dto.getLineValue("businessName") == null) dto.setLineValue("businessName", emp.getBusinessName());
-                if (dto.getLineValue("tradeName") == null) dto.setLineValue("tradeName", emp.getTradeName());
-                if (dto.getLineValue("address") == null) dto.setLineValue("address", emp.getAddressLine1());
-                if (dto.getLineValue("city") == null) dto.setLineValue("city", emp.getCity());
-                if (dto.getLineValue("state") == null) dto.setLineValue("state", emp.getState());
-                if (dto.getLineValue("zip") == null) dto.setLineValue("zip", emp.getZip());
-            });
-        }
+            if (dto.getEmployerId() == null || dto.getEmployerId() <= 0) {
+                List<Employer> employers = employerService.getAllEmployers(userId);
+                if (!employers.isEmpty()) {
+                    dto.setEmployerId(employers.get(0).getEmployerId());
+                }
+            }
 
-        model.addAttribute("formDTO", dto);
-        return "form941/interactive";
+            if (dto.getEmployerId() != null && dto.getEmployerId() > 0) {
+                employerService.getEmployerByIdAndUserId(dto.getEmployerId(), userId).ifPresent(emp -> {
+                    if (dto.getLineValue("ein") == null) dto.setLineValue("ein", emp.getEin());
+                    if (dto.getLineValue("businessName") == null) dto.setLineValue("businessName", emp.getBusinessName());
+                    if (dto.getLineValue("tradeName") == null) dto.setLineValue("tradeName", emp.getTradeName());
+                    if (dto.getLineValue("address") == null) dto.setLineValue("address", emp.getAddressLine1());
+                    if (dto.getLineValue("city") == null) dto.setLineValue("city", emp.getCity());
+                    if (dto.getLineValue("state") == null) dto.setLineValue("state", emp.getState());
+                    if (dto.getLineValue("zip") == null) dto.setLineValue("zip", emp.getZip());
+                });
+            }
+
+            model.addAttribute("formDTO", dto);
+            return "form941/interactive";
+        } catch (Exception e) {
+            logger.error("[FORM941 INTERACTIVE ERROR] Failed loading interactive form for User ID: {}, Form ID: {}", userId, id, e);
+            throw e;
+        }
     }
 
     @GetMapping("/form941/view")

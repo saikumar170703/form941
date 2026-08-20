@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +17,8 @@ import com.company.irs941.model.Employer;
 
 @Repository
 public class EmployerDao {
+
+    private static final Logger logger = LogManager.getLogger(EmployerDao.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

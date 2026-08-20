@@ -17,8 +17,13 @@ import com.company.irs941.model.User;
 import com.company.irs941.service.AuthService;
 import com.company.irs941.service.EmployerService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Controller
 public class AuthController {
+
+    private static final Logger logger = LogManager.getLogger(AuthController.class);
 
     @Autowired
     private AuthService authService;
@@ -28,6 +33,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String showLoginPage() {
+        logger.info("[AUTH] Displaying login page.");
         return "login";
     }
 
@@ -36,6 +42,7 @@ public class AuthController {
                                @RequestParam("password") String password,
                                HttpSession session,
                                Model model) {
+        logger.info("[AUTH LOGIN ATTEMPT] Email: {}", email);
         Optional<User> optUser = authService.authenticate(email, password);
         if (optUser.isPresent()) {
             User u = optUser.get();
@@ -46,8 +53,10 @@ public class AuthController {
             session.setAttribute("userFullName", name);
             String firstName = name.contains(" ") ? name.split(" ")[0] : name;
             session.setAttribute("userFirstName", firstName);
+            logger.info("[AUTH LOGIN SUCCESS] User ID: {}, Email: {} redirected to /dashboard", u.getUserId(), u.getEmail());
             return "redirect:/dashboard";
         } else {
+            logger.warn("[AUTH LOGIN FAILED] Invalid credentials attempt for email: {}", email);
             model.addAttribute("error", "Invalid email/username or password. Please check your credentials or create a new account.");
             return "login";
         }

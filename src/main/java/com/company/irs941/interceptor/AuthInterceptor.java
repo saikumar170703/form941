@@ -4,12 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * Authentication Interceptor with OWASP Security Headers Enforcer
  */
 public class AuthInterceptor implements HandlerInterceptor {
+
+    private static final Logger logger = LogManager.getLogger(AuthInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -34,6 +38,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null || session.getAttribute("user") == null) {
+            logger.warn("[AUTH INTERCEPTOR] Unauthorized access attempt to URI: {} from IP: {}. Redirecting to /login", path, request.getRemoteAddr());
             response.sendRedirect(contextPath + "/login");
             return false;
         }

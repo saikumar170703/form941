@@ -3,8 +3,8 @@ package com.company.irs941.service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import com.company.irs941.model.User;
 @Service
 public class AuthService {
 
-    private static final Logger logger = Logger.getLogger(AuthService.class.getName());
+    private static final Logger logger = LogManager.getLogger(AuthService.class);
 
     @Autowired
     private UserDao userDao;
@@ -44,7 +44,7 @@ public class AuthService {
             }
         }
 
-        logger.warning("Authentication failed for user identifier: " + emailOrUsername);
+        logger.warn("Authentication failed for user identifier: " + emailOrUsername);
         return Optional.empty();
     }
 

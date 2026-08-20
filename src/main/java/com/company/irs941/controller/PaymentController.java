@@ -13,11 +13,16 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Payment Controller for Authorize.Net Integration
  */
 @Controller
 public class PaymentController {
+
+    private static final Logger logger = LogManager.getLogger(PaymentController.class);
 
     @Autowired
     private AuthorizeNetPaymentService paymentService;
@@ -30,6 +35,7 @@ public class PaymentController {
     public ResponseEntity<Map<String, Object>> processPayment(@RequestBody PaymentRequestDTO request, HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
+            logger.warn("[PAYMENT API] Session expired attempt for payment processing.");
             Map<String, Object> err = new HashMap<>();
             err.put("success", false);
             err.put("message", "User session expired. Please log in again.");
@@ -40,7 +46,18 @@ public class PaymentController {
             request.setAmount(paymentConfig.getFilingFee());
         }
 
+        logger.info("[PAYMENT PROCESS] Initiating payment for User ID: {}, Form 941 ID: {}, Amount: ${}", 
+                userId, request.getForm941Id(), request.getAmount());
+
         Map<String, Object> result = paymentService.processPayment(request, userId);
+
+        Boolean success = (Boolean) result.get("success");
+        if (Boolean.TRUE.equals(success)) {
+            logger.info("[PAYMENT SUCCESS] Transaction ID: {}, Form 941 ID: {}", result.get("transactionId"), request.getForm941Id());
+        } else {
+            logger.error("[PAYMENT FAILED] User ID: {}, Reason: {}", userId, result.get("message"));
+        }
+
         return ResponseEntity.ok(result);
     }
 

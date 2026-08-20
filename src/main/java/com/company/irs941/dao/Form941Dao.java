@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +21,8 @@ import com.company.irs941.model.Form941;
 
 @Repository
 public class Form941Dao {
+
+    private static final Logger logger = LogManager.getLogger(Form941Dao.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

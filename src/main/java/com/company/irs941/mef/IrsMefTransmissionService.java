@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * IRS MeF Transmission Service
  * Handles HTTP/SOAP submission to IRS MeF Gateway (ATS / Production)
@@ -20,6 +23,8 @@ import java.util.UUID;
  */
 @Service
 public class IrsMefTransmissionService {
+
+    private static final Logger logger = LogManager.getLogger(IrsMefTransmissionService.class);
 
     @Autowired(required = false)
     private MefConfigProperties config;
