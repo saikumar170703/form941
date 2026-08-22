@@ -30,6 +30,7 @@ public class UserDao {
             user.setFullName(rs.getString("full_name"));
             user.setEmail(rs.getString("email"));
             user.setPasswordHash(rs.getString("password_hash"));
+            try { user.setGoogleId(rs.getString("google_id")); } catch (Exception ignored) {}
             user.setRoleId(rs.getObject("role_id") != null ? rs.getInt("role_id") : null);
             user.setStatus(rs.getString("status"));
             user.setCreatedAt(rs.getTimestamp("created_at"));
@@ -37,6 +38,18 @@ public class UserDao {
             return user;
         }
     };
+
+    public Optional<User> findByGoogleId(String googleId) {
+        if (googleId == null || googleId.trim().isEmpty()) return Optional.empty();
+        try {
+            String sql = "SELECT * FROM users WHERE google_id = ?";
+            List<User> users = jdbcTemplate.query(sql, USER_ROW_MAPPER, googleId.trim());
+            return users.stream().findFirst();
+        } catch (Exception e) {
+            logger.error("Error finding user by google_id: " + googleId, e);
+            return Optional.empty();
+        }
+    }
 
     public Optional<User> findByEmail(String email) {
         try {
@@ -62,10 +75,10 @@ public class UserDao {
 
     public User createUser(User user) {
         try {
-            String sql = "INSERT INTO users (full_name, email, password_hash, role_id, status, created_at, updated_at) " +
-                         "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING user_id";
+            String sql = "INSERT INTO users (full_name, email, password_hash, google_id, role_id, status, created_at, updated_at) " +
+                         "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING user_id";
             Long id = jdbcTemplate.queryForObject(sql, Long.class, 
-                    user.getFullName(), user.getEmail(), user.getPasswordHash(), 
+                    user.getFullName(), user.getEmail(), user.getPasswordHash(), user.getGoogleId(),
                     user.getRoleId() != null ? user.getRoleId() : 2, 
                     user.getStatus() != null ? user.getStatus() : "ACTIVE");
             user.setUserId(id);
@@ -73,6 +86,16 @@ public class UserDao {
         } catch (Exception e) {
             logger.error("Error creating user: " + user.getEmail(), e);
             throw new RuntimeException("Database error creating user account: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean updateGoogleId(Long userId, String googleId) {
+        try {
+            String sql = "UPDATE users SET google_id = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?";
+            return jdbcTemplate.update(sql, googleId, userId) > 0;
+        } catch (Exception e) {
+            logger.error("Error updating google_id: userId=" + userId, e);
+            return false;
         }
     }
 

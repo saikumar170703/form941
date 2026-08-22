@@ -38,6 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/index", "/home", "/index.html", "/landing", "/login", "/register", "/auth/**", "/assets/**", "/css/**", "/js/**", "/images/**");
+                .excludePathPatterns("/", "/index", "/home", "/index.html", "/landing", "/login", "/login/**", "/register", "/register/**", "/auth/**", "/oauth2/**", "/assets/**", "/css/**", "/js/**", "/images/**");
     }
 }

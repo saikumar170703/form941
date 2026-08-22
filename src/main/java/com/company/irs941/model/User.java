@@ -7,6 +7,7 @@ public class User {
     private String fullName;
     private String email;
     private String passwordHash;
+    private String googleId;
     private Integer roleId;
     private String status;
     private String company;
@@ -83,6 +84,14 @@ public class User {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 
     public Integer getRoleId() {

@@ -101,7 +101,7 @@ public class AuthorizeNetPaymentService {
                 approved = true;
                 transId = "AUTHNET-TEST-" + System.currentTimeMillis();
                 authCode = String.valueOf((int)(Math.random() * 899999 + 100000));
-                resultMessage = "Authorize.Net Demo Transaction Approved! (Provide real credentials in irs-mef.properties for production live charges)";
+                resultMessage = "Authorize.Net Demo Transaction Approved! (Provide real credentials in authorize.properties for production live charges)";
             } else {
                 approved = false;
                 resultMessage = extractJsonVal(body, "text");
@@ -155,7 +155,7 @@ public class AuthorizeNetPaymentService {
                 }
 
                 response.put("success", true);
-                response.put("message", "Authorize.Net Test Transaction Approved! (Provide real credentials in irs-mef.properties)");
+                response.put("message", "Authorize.Net Test Transaction Approved! (Provide real credentials in authorize.properties)");
                 response.put("transactionId", transId);
                 response.put("authCode", authCode);
                 response.put("amount", amount);

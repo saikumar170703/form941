@@ -244,6 +244,7 @@
                 <!-- Google Form -->
                 <form action="<%= request.getContextPath() %>/auth/google/register" method="POST"
                     id="googleAuthPopupForm">
+                    <input type="hidden" name="googleId" id="googleId">
                     <input type="hidden" name="googleEmail" id="googleEmail">
                     <input type="hidden" name="googleName" id="googleName">
 
@@ -283,11 +284,24 @@
             </div>
 
             <script>
-                function selectAccount(email, name) {
+                function selectAccount(email, name, sub) {
+                    var stableSub = sub || ("google-sub-" + Math.abs(email.toLowerCase().hashCode()));
+                    document.getElementById('googleId').value = stableSub;
                     document.getElementById('googleEmail').value = email;
                     document.getElementById('googleName').value = name || email.split('@')[0];
                     performSubmission();
                 }
+
+                String.prototype.hashCode = function() {
+                    var hash = 0, i, chr;
+                    if (this.length === 0) return hash;
+                    for (i = 0; i < this.length; i++) {
+                        chr = this.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + chr;
+                        hash |= 0;
+                    }
+                    return hash;
+                };
 
                 function submitCurrentEmail() {
                     var val = document.getElementById('manualEmail').value;
@@ -297,6 +311,8 @@
                     }
                     var email = val.trim();
                     var name = email.includes('@') ? email.split('@')[0] : 'Google User';
+                    var stableSub = "google-sub-" + Math.abs(email.toLowerCase().hashCode());
+                    document.getElementById('googleId').value = stableSub;
                     document.getElementById('googleEmail').value = email;
                     document.getElementById('googleName').value = name;
                     performSubmission();

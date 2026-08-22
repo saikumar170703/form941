@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name     VARCHAR(150) NOT NULL,
     email         VARCHAR(255) NOT NULL UNIQUE,
     password_hash TEXT,
+    google_id     VARCHAR(255) UNIQUE,
     role_id       INT REFERENCES user_roles(role_id),
     status        VARCHAR(20) DEFAULT 'ACTIVE',
     created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

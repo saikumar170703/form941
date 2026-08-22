@@ -58,6 +58,52 @@ public class AuthService {
         return userDao.findByEmail(email.trim().toLowerCase());
     }
 
+    public User processGoogleOAuthUser(String googleId, String email, String fullName) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Google email address is required.");
+        }
+
+        String cleanEmail = email.trim().toLowerCase();
+        String cleanName = (fullName != null && !fullName.trim().isEmpty()) ? fullName.trim() : cleanEmail.split("@")[0];
+
+        // 1. Find by google_id (Google's stable subject 'sub')
+        if (googleId != null && !googleId.trim().isEmpty()) {
+            Optional<User> byGoogleId = userDao.findByGoogleId(googleId.trim());
+            if (byGoogleId.isPresent()) {
+                logger.info("Found existing user by google_id: " + googleId);
+                return byGoogleId.get();
+            }
+        }
+
+        // 2. Find by email
+        Optional<User> byEmail = userDao.findByEmail(cleanEmail);
+        if (byEmail.isPresent()) {
+            User u = byEmail.get();
+            if (googleId != null && !googleId.trim().isEmpty() && (u.getGoogleId() == null || u.getGoogleId().isEmpty())) {
+                u.setGoogleId(googleId.trim());
+                userDao.updateGoogleId(u.getUserId(), googleId.trim());
+            }
+            logger.info("Linked Google login to existing email account: " + cleanEmail);
+            return u;
+        }
+
+        // 3. Create new user: username = email, password = NULL, google_id = sub, email = email
+        User u = new User();
+        u.setFullName(cleanName);
+        u.setEmail(cleanEmail);
+        u.setPasswordHash(null); // password = NULL for Google users
+        u.setGoogleId(googleId != null ? googleId.trim() : null);
+        u.setRoleId(2);
+        u.setStatus("ACTIVE");
+
+        User saved = userDao.createUser(u);
+        if (saved != null && saved.getUserId() != null) {
+            auditLogService.log("users", saved.getUserId(), "GOOGLE_SIGNUP", saved.getUserId(), "New Google user registered: " + cleanEmail);
+            logger.info("New Google user created in DB: " + cleanEmail + ", google_id: " + googleId);
+        }
+        return saved;
+    }
+
     public User registerUser(String fullName, String email, String password) {
         User u = new User();
         u.setFullName(fullName != null ? fullName.trim() : "");

@@ -31,7 +31,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // Allow public static resources, authentication endpoints, and internal WEB-INF view forwards
         if (path.isEmpty() || path.equals("") || path.equals("/") || path.equals("/index") || path.equals("/index.jsp") || path.equals("/home") || path.equals("/index.html") || path.equals("/landing") || 
-            path.equals("/login") || path.equals("/register") || path.startsWith("/auth/") ||
+            path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/auth/") || path.startsWith("/oauth2/") ||
             path.equals("/health") || path.equals("/payment/config") ||
             path.startsWith("/assets/") || path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/images/") ||
             path.startsWith("/WEB-INF/")) {

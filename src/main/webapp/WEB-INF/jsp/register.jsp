@@ -176,11 +176,14 @@
                     <!-- Registration Form with EXACT 4 Specified Fields -->
                     <form action="<%= request.getContextPath() %>/register" method="POST" id="registerForm">
                         
-                        <!-- Field 1: Work email -->
+                        <!-- Field 1: Email -->
                         <div class="form-field-wrapper">
-                            <label for="email" class="form-field-label">Work email</label>
-                            <input type="email" id="email" name="email" class="form-control form-control-custom" placeholder="" required autofocus>
+                            <label for="email" class="form-field-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-custom" placeholder="name@example.com" required autofocus oninput="validateEmailField(this)">
                             <i class="far fa-envelope input-right-icon"></i>
+                            <div id="emailFeedback" class="invalid-feedback text-start" style="display: none; color: #DC2626; font-size: 0.76rem; margin-top: 4px;">
+                                Please enter a valid email address (e.g. user@domain.com).
+                            </div>
                         </div>
 
                         <!-- Field 2: Contact name -->
@@ -200,8 +203,11 @@
                         <!-- Field 4: Phone number -->
                         <div class="form-field-wrapper">
                             <label for="phone" class="form-field-label">Phone number</label>
-                            <input type="tel" id="phone" name="phone" class="form-control form-control-custom" placeholder="">
+                            <input type="tel" id="phone" name="phone" class="form-control form-control-custom" placeholder="(123) 456-7890" maxlength="14" oninput="formatPhoneNumber(this)">
                             <i class="fas fa-phone input-right-icon"></i>
+                            <div id="phoneFeedback" class="invalid-feedback text-start" style="display: none; color: #DC2626; font-size: 0.76rem; margin-top: 4px;">
+                                Please enter a valid 10-digit phone number.
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
@@ -216,21 +222,16 @@
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-semibold">Or create account with</span>
                     </div>
 
-                    <!-- Google Sign Up Button (Launches Official Google OAuth Popup Window) -->
-                    <form action="<%= request.getContextPath() %>/auth/google/register" method="POST" id="googleSignUpForm">
-                        <input type="hidden" name="googleEmail" id="googleEmailInput">
-                        <input type="hidden" name="googleName" id="googleNameInput">
-                        
-                        <button type="button" class="btn btn-google-signup mb-3 shadow-sm" onclick="openGoogleOAuthPopupWindow()">
-                            <svg width="18" height="18" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                            </svg>
-                            Google
-                        </button>
-                    </form>
+                    <!-- Google Sign Up Button -->
+                    <a href="<%= request.getContextPath() %>/auth/google/login" class="btn btn-google-signup mb-3 shadow-sm text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        Sign Up with Google
+                    </a>
 
                     <!-- Footer Consent Text -->
                     <div class="text-center text-muted mt-3" style="font-size: 0.76rem; line-height: 1.45;">
@@ -274,24 +275,69 @@
             }
         }
 
-        // Opens Official Google OAuth Popup Dialog Window
-        function openGoogleOAuthPopupWindow() {
-            const width = 500;
-            const height = 620;
-            const left = Math.max(0, (window.screen.width / 2) - (width / 2));
-            const top = Math.max(0, (window.screen.height / 2) - (height / 2));
-
-            const popup = window.open(
-                '<%= request.getContextPath() %>/auth/google/popup',
-                'Sign in - Google Accounts',
-                'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left + ',scrollbars=yes,status=yes,resizable=yes'
-            );
-
-            if (!popup) {
-                // Fallback if popups blocked
-                alert('Please allow popups to sign in with Google.');
+        function validateEmailField(input) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const feedback = document.getElementById('emailFeedback');
+            if (input.value.trim() !== '' && !emailRegex.test(input.value.trim())) {
+                input.style.borderColor = '#EF4444';
+                if (feedback) feedback.style.display = 'block';
+                return false;
+            } else {
+                input.style.borderColor = '#D1D5DB';
+                if (feedback) feedback.style.display = 'none';
+                return true;
             }
         }
+
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.substring(0, 10);
+            
+            let formatted = '';
+            if (value.length > 0) {
+                formatted = '(' + value.substring(0, Math.min(3, value.length));
+            }
+            if (value.length >= 4) {
+                formatted += ') ' + value.substring(3, Math.min(6, value.length));
+            }
+            if (value.length >= 7) {
+                formatted += '-' + value.substring(6, 10);
+            }
+            input.value = formatted;
+
+            const feedback = document.getElementById('phoneFeedback');
+            if (value.length > 0 && value.length < 10) {
+                input.style.borderColor = '#EF4444';
+                if (feedback) feedback.style.display = 'block';
+            } else {
+                input.style.borderColor = '#D1D5DB';
+                if (feedback) feedback.style.display = 'none';
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            
+            let isValid = true;
+
+            if (!validateEmailField(emailInput)) {
+                isValid = false;
+            }
+
+            if (phoneInput && phoneInput.value.trim() !== '') {
+                const digits = phoneInput.value.replace(/\D/g, '');
+                if (digits.length < 10) {
+                    phoneInput.style.borderColor = '#EF4444';
+                    document.getElementById('phoneFeedback').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>

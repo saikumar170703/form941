@@ -20,12 +20,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource(value = {
         "classpath:db.properties",
         "classpath:irs-mef.properties",
+        "classpath:authorize.properties",
+        "classpath:google.properties",
         // External Linux Configuration (production / staging)
         "file:/etc/efile941/db.properties",
         "file:/etc/efile941/irs-mef.properties",
+        "file:/etc/efile941/authorize.properties",
+        "file:/etc/efile941/google.properties",
         // External Windows Configuration (local development)
         "file:C:/efile941/config/db.properties",
-        "file:C:/efile941/config/irs-mef.properties"
+        "file:C:/efile941/config/irs-mef.properties",
+        "file:C:/efile941/config/authorize.properties",
+        "file:C:/efile941/config/google.properties"
 }, ignoreResourceNotFound = true)
 public class AppConfig {
 
