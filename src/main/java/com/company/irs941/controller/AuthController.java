@@ -31,6 +31,12 @@ public class AuthController {
     @Autowired(required = false)
     private EmployerService employerService;
 
+    @GetMapping({ "/", "/index", "/home", "/index.html", "/landing" })
+    public String showHomePage() {
+        logger.info("[AUTH] Displaying Form 941 public home page.");
+        return "index";
+    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         logger.info("[AUTH] Displaying login page.");
@@ -39,9 +45,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public String processLogin(@RequestParam("email") String email,
-                               @RequestParam("password") String password,
-                               HttpSession session,
-                               Model model) {
+            @RequestParam("password") String password,
+            HttpSession session,
+            Model model) {
         logger.info("[AUTH LOGIN ATTEMPT] Email: {}", email);
         Optional<User> optUser = authService.authenticate(email, password);
         if (optUser.isPresent()) {
@@ -53,11 +59,13 @@ public class AuthController {
             session.setAttribute("userFullName", name);
             String firstName = name.contains(" ") ? name.split(" ")[0] : name;
             session.setAttribute("userFirstName", firstName);
-            logger.info("[AUTH LOGIN SUCCESS] User ID: {}, Email: {} redirected to /dashboard", u.getUserId(), u.getEmail());
+            logger.info("[AUTH LOGIN SUCCESS] User ID: {}, Email: {} redirected to /dashboard", u.getUserId(),
+                    u.getEmail());
             return "redirect:/dashboard";
         } else {
             logger.warn("[AUTH LOGIN FAILED] Invalid credentials attempt for email: {}", email);
-            model.addAttribute("error", "Invalid email/username or password. Please check your credentials or create a new account.");
+            model.addAttribute("error",
+                    "Invalid email/username or password. Please check your credentials or create a new account.");
             return "login";
         }
     }
@@ -77,12 +85,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestParam("name") String name,
-                           @RequestParam("email") String email,
-                           @RequestParam("password") String password,
-                           @RequestParam(value = "businessName", required = false) String businessName,
-                           @RequestParam(value = "ein", required = false) String ein,
-                           HttpSession session,
-                           Model model) {
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam(value = "businessName", required = false) String businessName,
+            @RequestParam(value = "ein", required = false) String ein,
+            HttpSession session,
+            Model model) {
         try {
             User u = authService.registerUser(name, email, password);
             if (u == null || u.getUserId() == null) {
@@ -112,6 +120,63 @@ public class AuthController {
             return "redirect:/dashboard";
         } catch (Exception e) {
             model.addAttribute("error", "Error creating account: " + e.getMessage());
+            return "register";
+        }
+    }
+
+    @GetMapping("/auth/google/popup")
+    public String showGooglePopupPage() {
+        return "google_popup";
+    }
+
+    @PostMapping({ "/auth/google/register", "/register/google" })
+    public String registerWithGoogle(@RequestParam(value = "googleEmail", required = false) String googleEmail,
+            @RequestParam(value = "googleName", required = false) String googleName,
+            @RequestParam(value = "email", required = false) String fallbackEmail,
+            @RequestParam(value = "name", required = false) String fallbackName,
+            HttpSession session,
+            Model model) {
+        String rawEmail = (googleEmail != null && !googleEmail.trim().isEmpty()) ? googleEmail : fallbackEmail;
+        String rawName = (googleName != null && !googleName.trim().isEmpty()) ? googleName : fallbackName;
+
+        if (rawEmail == null || rawEmail.trim().isEmpty()) {
+            model.addAttribute("error", "Google email address is required for registration.");
+            return "register";
+        }
+
+        String email = rawEmail.trim().toLowerCase();
+        String name = (rawName != null && !rawName.trim().isEmpty()) ? rawName.trim() : email.split("@")[0];
+
+        try {
+            logger.info("[GOOGLE REGISTRATION ATTEMPT] Email: {}, Name: {}", email, name);
+            Optional<User> existingUser = authService.getUserByEmail(email);
+            User u;
+            if (existingUser.isPresent()) {
+                u = existingUser.get();
+                logger.info("[GOOGLE REGISTRATION] Existing user found in DB: {}, logging in.", email);
+            } else {
+                // Save user in DB creating username as mail and password (hashed version of
+                // email)
+                u = authService.registerUser(name, email, email);
+                logger.info("[GOOGLE REGISTRATION SUCCESS] New user created & saved in DB with username/email: {}",
+                        email);
+            }
+
+            if (u != null && u.getUserId() != null) {
+                session.setAttribute("user", u);
+                session.setAttribute("userId", u.getUserId());
+                session.setAttribute("userEmail", u.getEmail());
+                session.setAttribute("userFullName", u.getFullName());
+                String firstName = name.contains(" ") ? name.split(" ")[0] : name;
+                session.setAttribute("userFirstName", firstName);
+                return "redirect:/dashboard";
+            } else {
+                model.addAttribute("error", "Failed to create account with Google. Please try again.");
+                return "register";
+            }
+        } catch (Exception e) {
+            logger.error("[GOOGLE REGISTRATION ERROR] {}", e.getMessage(), e);
+            model.addAttribute("error", "Google registration failed: " + e.getMessage());
             return "register";
         }
     }

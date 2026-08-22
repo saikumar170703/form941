@@ -29,10 +29,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         String contextPath = request.getContextPath();
         String path = uri.substring(contextPath.length());
 
-        // Allow public static resources & authentication endpoints
-        if (path.equals("/login") || path.equals("/register") || path.startsWith("/auth/") ||
+        // Allow public static resources, authentication endpoints, and internal WEB-INF view forwards
+        if (path.isEmpty() || path.equals("") || path.equals("/") || path.equals("/index") || path.equals("/index.jsp") || path.equals("/home") || path.equals("/index.html") || path.equals("/landing") || 
+            path.equals("/login") || path.equals("/register") || path.startsWith("/auth/") ||
             path.equals("/health") || path.equals("/payment/config") ||
-            path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/images/")) {
+            path.startsWith("/assets/") || path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/images/") ||
+            path.startsWith("/WEB-INF/")) {
             return true;
         }
 

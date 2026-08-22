@@ -53,6 +53,11 @@ public class AuthService {
         return userDao.findById(userId);
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) return Optional.empty();
+        return userDao.findByEmail(email.trim().toLowerCase());
+    }
+
     public User registerUser(String fullName, String email, String password) {
         User u = new User();
         u.setFullName(fullName != null ? fullName.trim() : "");

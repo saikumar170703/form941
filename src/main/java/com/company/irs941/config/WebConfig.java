@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
@@ -37,6 +38,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/register", "/auth/**", "/css/**", "/js/**", "/images/**");
+                .excludePathPatterns("/", "/index", "/home", "/index.html", "/landing", "/login", "/register", "/auth/**", "/assets/**", "/css/**", "/js/**", "/images/**");
     }
 }
