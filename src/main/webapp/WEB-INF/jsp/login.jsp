@@ -6,9 +6,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - Form 941 E-File Portal</title>
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%= request.getContextPath() %>/css/style.css?v=4" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="<%= request.getContextPath() %>/css/style.css?v=25" rel="stylesheet">
+
+    <style>
+        .form-field-wrapper {
+            position: relative;
+            margin-bottom: 14px;
+        }
+        .form-field-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .form-control-custom {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 9px 40px 9px 12px;
+            font-size: 0.92rem;
+            color: #0F172A;
+            transition: all 0.2s ease;
+        }
+        .form-control-custom:focus {
+            border-color: #90EE90;
+            box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.45);
+            outline: none;
+        }
+        .input-right-icon {
+            position: absolute;
+            right: 12px;
+            bottom: 11px;
+            color: #667066;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+        .input-right-icon.interactive {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        .btn-create-account {
+            background-color: #90EE90;
+            border: 1px solid #90EE90;
+            color: #172017;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(23, 32, 23, 0.06);
+        }
+        .btn-create-account:hover {
+            background-color: #76E076;
+            border-color: #76E076;
+            color: #172017;
+            transform: translateY(-1px);
+        }
+        .btn-google-signup {
+            border: 1px solid #CBD5E1;
+            background-color: #FFFFFF;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            padding: 9px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+        .btn-google-signup:hover {
+            background-color: #F8FAFC;
+            border-color: #94A3B8;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid p-0 login-container">
@@ -34,7 +111,7 @@
 
                 <!-- Hero Content Body -->
                 <div class="my-auto py-2" style="max-width: 480px; z-index: 2;">
-                    <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill px-3 py-1.5 fw-semibold mb-2" style="background: rgba(99, 102, 241, 0.25) !important; color: #A5B4FC !important; font-size: 0.75rem;">
+                    <span class="badge rounded-pill px-3 py-1.5 fw-bold mb-2" style="background: #F1FFF1 !important; color: #172017 !important; border: 1px solid #90EE90 !important; font-size: 0.75rem;">
                         ✨ Next-Gen Tax Preparation
                     </span>
                     <h2 class="fw-extrabold text-white mb-2" style="letter-spacing: -0.02em; line-height: 1.2; font-size: 1.85rem;">
@@ -61,8 +138,8 @@
                     <div class="login-feature-card">
                         <div style="background: rgba(16, 185, 129, 0.2); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6EE7B7" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                         </div>
                         <div>
@@ -79,78 +156,54 @@
                 </div>
             </div>
 
-            <!-- Right Side Form Section -->
+            <!-- Right Side Sign In Form Section (MATCHING REGISTER PAGE DESIGN) -->
             <div class="col-lg-6 login-right-form">
-                <div class="login-box">
+                <div class="login-box my-auto" style="max-width: 440px; width: 100%;">
+                    
                     <div class="text-center mb-3">
-                        <div class="d-inline-flex align-items-center justify-content-center mb-2 d-lg-none" style="background: #4F46E5; width: 42px; height: 42px; border-radius: 10px; color: white;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" />
-                            </svg>
-                        </div>
-                        <h4 class="fw-extrabold text-dark mb-1">Welcome Back</h4>
-                        <p class="text-muted small m-0">Sign in to access your Form 941 dashboard</p>
+                        <h4 class="fw-extrabold text-dark mb-1" style="font-size: 1.5rem;">Welcome Back</h4>
+                        <p class="text-muted small m-0" style="font-size: 0.82rem;">
+                            Sign in to access your Form 941 dashboard
+                        </p>
                     </div>
 
                     <!-- Success Alert -->
                     <c:if test="${param.registered == 'true' || not empty success}">
-                        <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #ECFDF5; color: #065F46; border-left: 4px solid #10B981 !important;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            <span class="small fw-semibold">Account created successfully! Please sign in with your new credentials.</span>
+                        <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #ECFDF5; color: #065F46; border-left: 4px solid #10B981 !important; font-size: 0.82rem;">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Account created successfully! Please sign in with your new credentials.</span>
                         </div>
                     </c:if>
 
                     <!-- Error Alert -->
                     <c:if test="${not empty error}">
-                        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444 !important;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            <span class="small fw-semibold"><c:out value="${error}" /></span>
+                        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444 !important; font-size: 0.82rem;">
+                            <i class="fas fa-exclamation-circle text-danger"></i>
+                            <span><c:out value="${error}" /></span>
                         </div>
                     </c:if>
 
+                    <!-- Sign In Form -->
                     <form action="<%= request.getContextPath() %>/login" method="POST" id="loginForm">
-                        <div class="mb-3">
-                            <label for="email" class="form-label fw-bold text-dark small mb-1">Email or Username</label>
-                            <div class="input-icon-group">
-                                <span class="input-icon">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </span>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="name@company.com or username" required autofocus>
-                            </div>
+                        
+                        <!-- Field 1: Email or Username -->
+                        <div class="form-field-wrapper">
+                            <label for="email" class="form-field-label">Email or Username</label>
+                            <input type="text" id="email" name="email" class="form-control form-control-custom" placeholder="name@company.com or username" required autofocus>
+                            <i class="far fa-envelope input-right-icon"></i>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Field 2: Password -->
+                        <div class="form-field-wrapper">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label for="password" class="form-label fw-bold text-dark small m-0">Password</label>
-                                <a href="#" class="text-decoration-none small fw-semibold" style="color: var(--primary-indigo); font-size: 0.8rem;">Forgot password?</a>
+                                <label for="password" class="form-field-label mb-0">Password</label>
+                                <a href="#" class="text-decoration-none small fw-semibold" style="color: #059669; font-size: 0.8rem;">Forgot password?</a>
                             </div>
-                            <div class="input-icon-group">
-                                <span class="input-icon">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                    </svg>
-                                </span>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
-                                <button type="button" class="btn btn-link text-muted position-absolute end-0 top-50 translate-middle-y me-2 text-decoration-none p-0" onclick="togglePasswordVisibility()" aria-label="Toggle Password Visibility">
-                                    <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                </button>
-                            </div>
+                            <input type="password" id="password" name="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                            <i class="far fa-eye input-right-icon interactive" id="togglePasswordIcon" onclick="togglePasswordVisibility()" title="Show/Hide Password"></i>
                         </div>
 
+                        <!-- Remember Me -->
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="rememberMe">
                             <label class="form-check-label text-muted small cursor-pointer" for="rememberMe" style="font-size: 0.8rem;">
@@ -158,18 +211,20 @@
                             </label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 py-2.5 shadow-sm rounded-3 fw-bold" style="font-size: 0.95rem;">
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-create-account shadow-sm mt-2">
                             Sign In to Portal &rarr;
                         </button>
                     </form>
 
-                    <!-- Google Sign In Button -->
+                    <!-- Divider -->
                     <div class="my-3 text-center position-relative">
                         <hr class="text-muted opacity-25 my-3">
                         <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-semibold">Or sign in with</span>
                     </div>
 
-                    <a href="<%= request.getContextPath() %>/auth/google/login" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm text-decoration-none" style="border-color: #D1D5DB; background: #FFFFFF; color: #374151;">
+                    <!-- Google Sign In Button -->
+                    <a href="<%= request.getContextPath() %>/auth/google/login" class="btn btn-google-signup mb-3 shadow-sm text-decoration-none d-flex align-items-center justify-content-center gap-2">
                         <svg width="18" height="18" viewBox="0 0 24 24">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -182,7 +237,7 @@
                     <div class="text-center mt-3">
                         <p class="text-muted small m-0" style="font-size: 0.8rem;">
                             Don't have an account? 
-                            <a href="<%= request.getContextPath() %>/register" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Create Business Account</a>
+                            <a href="<%= request.getContextPath() %>/register" class="text-decoration-none fw-bold" style="color: #059669;">Create Business Account</a>
                         </p>
                     </div>
                 </div>
@@ -234,7 +289,8 @@
                         <div class="d-flex align-items-center gap-3">
                             <div class="rounded-circle bg-white border text-secondary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;"><i class="fas fa-user-plus fs-7"></i></div>
                             <div>
-                                <h6 class="mb-0 fw-semibold text-primary fs-7">Use another Gmail account</h6>
+                                <h6 class="mb-0 fw-bold text-dark fs-7">Use another account</h6>
+                                <span class="text-muted fs-7">Enter your Google email manually</span>
                             </div>
                         </div>
                     </div>
@@ -243,49 +299,42 @@
         </div>
     </div>
 
+    <!-- Hidden Form to submit mock Google login details -->
+    <form id="googleMockForm" action="<%= request.getContextPath() %>/login" method="POST" style="display: none;">
+        <input type="hidden" id="googleEmail" name="email">
+        <input type="hidden" id="googlePassword" name="password" value="GoogleAuthPassword123!">
+    </form>
+
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function togglePasswordVisibility() {
-            const passInput = document.getElementById('password');
-            if (passInput) {
-                passInput.type = (passInput.type === 'password') ? 'text' : 'password';
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                if (toggleIcon) {
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                }
+            } else {
+                passwordInput.type = 'password';
+                if (toggleIcon) {
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
             }
-        }
-
-        function openGoogleOAuthPopupWindow() {
-            const width = 500;
-            const height = 620;
-            const left = Math.max(0, (window.screen.width / 2) - (width / 2));
-            const top = Math.max(0, (window.screen.height / 2) - (height / 2));
-
-            const popup = window.open(
-                '<%= request.getContextPath() %>/auth/google/popup',
-                'Sign in - Google Accounts',
-                'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left + ',scrollbars=yes,status=yes,resizable=yes'
-            );
-
-            if (!popup) {
-                alert('Please allow popups to sign in with Google.');
-            }
-        }
-
-        function triggerGoogleLogin() {
-            openGoogleOAuthPopupWindow();
         }
 
         function submitGoogleLogin(email, name) {
-            if (!email) return;
-            document.getElementById('googleEmailLoginInput').value = email.trim();
-            document.getElementById('googleNameLoginInput').value = name ? name.trim() : email.split('@')[0];
-            document.getElementById('googleLoginForm').submit();
+            document.getElementById('googleEmail').value = email;
+            document.getElementById('googleMockForm').submit();
         }
 
         function promptCustomGoogleLogin() {
-            let email = prompt("Enter your Gmail address:", "user@gmail.com");
-            if (email && email.trim() !== "") {
-                let name = email.includes("@") ? email.split("@")[0] : "Google User";
-                submitGoogleLogin(email, name);
+            const userEmail = prompt("Enter your Google Account email address:", "user@gmail.com");
+            if (userEmail && userEmail.trim() !== "") {
+                submitGoogleLogin(userEmail.trim(), "Google User");
             }
         }
     </script>

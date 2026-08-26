@@ -32,15 +32,15 @@
             transition: all 0.2s ease;
         }
         .form-control-custom:focus {
-            border-color: #2563EB;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            border-color: #90EE90;
+            box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.45);
             outline: none;
         }
         .input-right-icon {
             position: absolute;
             right: 12px;
             bottom: 11px;
-            color: #94A3B8;
+            color: #667066;
             font-size: 0.9rem;
             pointer-events: none;
         }
@@ -49,20 +49,22 @@
             cursor: pointer;
         }
         .btn-create-account {
-            background-color: #2563EB;
-            border: 1px solid #2563EB;
-            color: #FFFFFF;
+            background-color: #90EE90;
+            border: 1px solid #90EE90;
+            color: #172017;
             font-weight: 700;
             font-size: 0.95rem;
             border-radius: 8px;
             padding: 10px;
             width: 100%;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(23, 32, 23, 0.06);
         }
         .btn-create-account:hover {
-            background-color: #1D4ED8;
-            border-color: #1D4ED8;
-            color: #FFFFFF;
+            background-color: #76E076;
+            border-color: #76E076;
+            color: #172017;
+            transform: translateY(-1px);
         }
         .btn-google-signup {
             border: 1px solid #CBD5E1;

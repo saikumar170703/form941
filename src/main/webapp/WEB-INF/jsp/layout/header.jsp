@@ -51,8 +51,8 @@
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
                     <span
-                        class="position-absolute top-0 start-100 translate-middle p-1 bg-primary border border-light rounded-circle"
-                        style="width: 8px; height: 8px; background-color: var(--primary-indigo) !important;">
+                        class="position-absolute top-0 start-100 translate-middle p-1 border rounded-circle"
+                        style="width: 10px; height: 10px; background-color: #90EE90 !important; border-color: #172017 !important;">
                         <span class="visually-hidden">New alerts</span>
                     </span>
                 </div>

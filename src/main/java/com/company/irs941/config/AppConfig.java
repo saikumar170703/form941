@@ -2,6 +2,8 @@ package com.company.irs941.config;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "file:C:/efile941/config/google.properties"
 }, ignoreResourceNotFound = true)
 public class AppConfig {
+
+    private static final Logger logger = LogManager.getLogger(AppConfig.class);
 
     static {
         // Set JVM default TimeZone to UTC to prevent PostgreSQL driver FATAL invalid TimeZone error during connection startup
@@ -75,5 +79,20 @@ public class AppConfig {
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    public org.springframework.jdbc.datasource.init.DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
+        logger.info("[DATABASE MIGRATION INITIALIZER] Automatically executing schema migrations on WAR startup...");
+        org.springframework.jdbc.datasource.init.DataSourceInitializer initializer = new org.springframework.jdbc.datasource.init.DataSourceInitializer();
+        initializer.setDataSource(dataSource);
+        
+        org.springframework.jdbc.datasource.init.ResourceDatabasePopulator populator = new org.springframework.jdbc.datasource.init.ResourceDatabasePopulator();
+        populator.addScript(new org.springframework.core.io.ClassPathResource("db/migration/V1__init_schema.sql"));
+        populator.addScript(new org.springframework.core.io.ClassPathResource("db/migration/V2__add_google_id_column.sql"));
+        populator.setContinueOnError(true);
+        
+        initializer.setDatabasePopulator(populator);
+        return initializer;
     }
 }

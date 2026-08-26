@@ -19,66 +19,66 @@
 
         <style>
             :root {
-                --app-primary: #2563EB;
-                --app-primary-hover: #1D4ED8;
-                --app-navy-dark: #0F172A;
-                --app-slate-bg: #F8FAFC;
-                --app-border: #E2E8F0;
+                --app-primary: #90EE90;
+                --app-primary-hover: #76E076;
+                --app-navy-dark: #172017;
+                --app-slate-bg: #FFFFFF;
+                --app-border: #E5E9E5;
             }
 
             body {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                color: #1E293B;
-                background-color: var(--app-slate-bg);
+                font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                color: #172017;
+                background-color: #FFFFFF;
             }
 
             /* Top Announcement Bar */
             .top-stripe {
-                background-color: #0F172A;
-                border-bottom: 1px solid #1E293B;
-                color: #94A3B8;
+                background-color: #172017;
+                border-bottom: 1px solid #283628;
+                color: #E5E9E5;
                 font-size: 0.85rem;
                 padding: 8px 0;
                 font-weight: 500;
             }
 
             .top-stripe a {
-                color: #60A5FA;
+                color: #90EE90;
                 text-decoration: underline;
                 font-weight: 600;
             }
 
             /* Sub-Utility Navbar */
             .subnav {
-                background-color: #F1F5F9;
+                background-color: #F1FFF1;
                 border-bottom: 1px solid var(--app-border);
                 font-size: 0.82rem;
                 padding: 6px 0;
             }
 
             .subnav a {
-                color: #475569;
+                color: #667066;
                 text-decoration: none;
                 font-weight: 500;
                 transition: color 0.2s;
             }
 
             .subnav a:hover {
-                color: var(--app-primary);
+                color: #172017;
             }
 
             /* Main Navigation Bar */
             .main-navbar {
                 background: #FFFFFF;
                 border-bottom: 1px solid var(--app-border);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+                box-shadow: 0 2px 12px rgba(23, 32, 23, 0.03);
                 padding: 14px 0;
             }
 
             .brand-logo {
                 font-size: 1.5rem;
                 font-weight: 800;
-                color: #0F172A;
+                color: #172017;
                 letter-spacing: -0.5px;
                 text-decoration: none;
                 display: flex;
@@ -87,9 +87,9 @@
             }
 
             .irs-seal-badge {
-                background: #EFF6FF;
-                color: var(--app-primary);
-                border: 1px solid #BFDBFE;
+                background: #F1FFF1;
+                color: #172017;
+                border: 1px solid #90EE90;
                 font-size: 0.72rem;
                 font-weight: 700;
                 padding: 3px 10px;
@@ -100,40 +100,44 @@
 
             /* Buttons */
             .btn-signin {
-                border: 1.5px solid var(--app-primary);
-                color: var(--app-primary);
-                font-weight: 600;
+                border: 1.5px solid var(--app-border);
+                color: #172017;
+                font-weight: 700;
                 border-radius: 50rem;
                 padding: 7px 24px;
                 transition: all 0.2s ease;
+                background: #FFFFFF;
             }
 
             .btn-signin:hover {
-                background-color: #EFF6FF;
-                color: var(--app-primary-hover);
+                background-color: #F1FFF1;
+                border-color: #90EE90;
+                color: #172017;
             }
 
             .btn-signup {
-                background-color: var(--app-primary);
-                color: white;
-                font-weight: 600;
+                background-color: #90EE90;
+                border: 1px solid #90EE90;
+                color: #172017;
+                font-weight: 700;
                 border-radius: 50rem;
                 padding: 8px 26px;
-                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+                box-shadow: 0 2px 6px rgba(23, 32, 23, 0.06);
                 transition: all 0.2s ease;
             }
 
             .btn-signup:hover {
-                background-color: var(--app-primary-hover);
-                color: white;
+                background-color: #76E076;
+                border-color: #76E076;
+                color: #172017;
                 transform: translateY(-1px);
             }
 
-            /* Rich Blue Hero Section - Compact Height Matching Executive Design */
+            /* Senior UI/UX Dark Forest Hero Section with #90EE90 Light Green Accents */
             .hero-banner {
-                background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 40%, #312E81 70%, #4F46E5 100%);
+                background: #172017;
                 color: #FFFFFF;
-                padding: 42px 0 46px;
+                padding: 48px 0 52px;
                 position: relative;
                 overflow: hidden;
             }
@@ -145,13 +149,13 @@
                 right: -10%;
                 width: 500px;
                 height: 500px;
-                background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(79, 70, 229, 0) 70%);
+                background: radial-gradient(circle, rgba(144, 238, 144, 0.18) 0%, rgba(23, 32, 23, 0) 70%);
                 border-radius: 50%;
                 pointer-events: none;
             }
 
             .hero-title {
-                font-size: 2.25rem;
+                font-size: 2.35rem;
                 font-weight: 800;
                 line-height: 1.2;
                 letter-spacing: -0.02em;
@@ -160,7 +164,7 @@
 
             .hero-subtitle {
                 font-size: 0.98rem;
-                color: #CBD5E1;
+                color: #E5E9E5;
                 margin-top: 12px;
                 margin-bottom: 20px;
                 line-height: 1.55;
@@ -169,11 +173,11 @@
             /* Compact Executive White Estimator Card Component */
             .estimator-card-white {
                 background: #FFFFFF;
-                border: 1px solid #CBD5E1;
+                border: 1px solid #E5E9E5;
                 border-radius: 16px;
                 padding: 22px 24px;
-                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
-                color: #0F172A;
+                box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+                color: #172017;
                 max-width: 450px;
                 margin-left: auto;
             }
@@ -181,20 +185,20 @@
             .estimator-card-title {
                 font-size: 1.1rem;
                 font-weight: 800;
-                color: #0F172A;
+                color: #172017;
                 margin-bottom: 2px;
             }
 
             .estimator-card-subtitle {
                 font-size: 0.78rem;
-                color: #64748B;
+                color: #667066;
                 margin-bottom: 16px;
             }
 
             /* Compact Rounded Individual Field Box */
             .field-rounded-box {
-                background: #F8FAFC;
-                border: 1px solid #E2E8F0;
+                background: #FAFCFA;
+                border: 1px solid #E5E9E5;
                 border-radius: 12px;
                 padding: 10px 14px;
             }
@@ -202,38 +206,38 @@
             .field-label {
                 font-size: 0.78rem;
                 font-weight: 700;
-                color: #475569;
+                color: #172017;
                 margin-bottom: 4px;
                 display: block;
             }
 
             .field-input-wages {
                 background: #FFFFFF;
-                border: 1.5px solid #CBD5E1;
+                border: 1.5px solid #E5E9E5;
                 border-radius: 8px;
-                color: #0F172A;
+                color: #172017;
                 font-weight: 800;
                 font-size: 1.05rem;
                 padding: 6px 12px;
             }
 
             .field-input-wages:focus {
-                border-color: var(--app-primary);
-                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+                border-color: #90EE90;
+                box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.45);
                 outline: none;
             }
 
             .field-stat-value {
                 font-size: 1.1rem;
                 font-weight: 800;
-                color: #1E3A8A;
+                color: #172017;
                 margin-top: 2px;
             }
 
             /* Compact Executive Summary Box */
             .field-summary-box {
-                background: #EFF6FF;
-                border: 1.5px solid #BFDBFE;
+                background: #F1FFF1;
+                border: 1.5px solid #90EE90;
                 border-radius: 14px;
                 padding: 12px 16px;
             }
@@ -241,40 +245,28 @@
             .field-summary-label {
                 font-size: 0.72rem;
                 font-weight: 700;
-                color: #475569;
+                color: #667066;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 display: block;
             }
 
             .field-summary-total {
-                font-size: 1.45rem;
+                font-size: 1.55rem;
                 font-weight: 900;
-                color: #1D4ED8;
+                color: #172017;
                 line-height: 1.1;
-            }
-
-            color: #475569;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
-            }
-
-            .field-summary-total {
-                font-size: 1.85rem;
-                font-weight: 900;
-                color: #1D4ED8;
             }
 
             /* Quarter Pill Badge */
             .quarter-pill {
-                background: rgba(255, 255, 255, 0.12);
-                border: 1px solid rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 border-radius: 50rem;
                 padding: 4px 14px;
                 font-size: 0.8rem;
                 font-weight: 600;
-                color: #E2E8F0;
+                color: #F1FFF1;
             }
 
             /* Feature Cards */
@@ -285,21 +277,22 @@
                 padding: 30px;
                 height: 100%;
                 transition: all 0.25s ease;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+                box-shadow: 0 4px 12px rgba(23, 32, 23, 0.03);
             }
 
             .feature-card:hover {
                 transform: translateY(-4px);
-                box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.06);
-                border-color: #BFDBFE;
+                box-shadow: 0 12px 24px rgba(23, 32, 23, 0.08);
+                border-color: #90EE90;
             }
 
             .feature-icon {
                 width: 52px;
                 height: 52px;
                 border-radius: 12px;
-                background: #EFF6FF;
-                color: var(--app-primary);
+                background: #F1FFF1;
+                color: #172017;
+                border: 1px solid #90EE90;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -312,42 +305,43 @@
                 width: 42px;
                 height: 42px;
                 border-radius: 50%;
-                background: var(--app-primary);
-                color: white;
-                font-weight: 700;
+                background: #90EE90;
+                color: #172017;
+                font-weight: 800;
                 font-size: 1.1rem;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 14px;
+                border: 1px solid #76E076;
             }
 
             /* Pricing Card */
             .pricing-card {
                 background: #FFFFFF;
-                border: 2px solid var(--app-primary);
+                border: 2px solid #90EE90;
                 border-radius: 20px;
                 padding: 40px 32px;
-                box-shadow: 0 16px 32px rgba(37, 99, 235, 0.1);
+                box-shadow: 0 12px 28px rgba(23, 32, 23, 0.06);
                 position: relative;
             }
 
             /* Footer */
             .footer-dark {
-                background: #0F172A;
-                color: #94A3B8;
+                background: #172017;
+                color: #E5E9E5;
                 padding: 65px 0 35px;
                 font-size: 0.9rem;
             }
 
             .footer-dark a {
-                color: #CBD5E1;
+                color: #E5E9E5;
                 text-decoration: none;
                 transition: color 0.2s;
             }
 
             .footer-dark a:hover {
-                color: #FFFFFF;
+                color: #90EE90;
             }
         </style>
     </head>
@@ -423,10 +417,10 @@
                     <div class="col-lg-6">
                         <!-- Quarter Badges -->
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="quarter-pill"><i class="fas fa-check text-info me-1"></i> Q1 (Jan - Mar)</span>
-                            <span class="quarter-pill"><i class="fas fa-check text-info me-1"></i> Q2 (Apr - Jun)</span>
-                            <span class="quarter-pill"><i class="fas fa-check text-info me-1"></i> Q3 (Jul - Sep)</span>
-                            <span class="quarter-pill"><i class="fas fa-check text-info me-1"></i> Q4 (Oct - Dec)</span>
+                            <span class="quarter-pill"><i class="fas fa-check me-1" style="color: #90EE90;"></i> Q1 (Jan - Mar)</span>
+                            <span class="quarter-pill"><i class="fas fa-check me-1" style="color: #90EE90;"></i> Q2 (Apr - Jun)</span>
+                            <span class="quarter-pill"><i class="fas fa-check me-1" style="color: #90EE90;"></i> Q3 (Jul - Sep)</span>
+                            <span class="quarter-pill"><i class="fas fa-check me-1" style="color: #90EE90;"></i> Q4 (Oct - Dec)</span>
                         </div>
 
                         <h1 class="hero-title">E-File IRS Form 941 Online Securely & Accurately</h1>
@@ -437,19 +431,19 @@
 
                         <div class="d-flex flex-wrap gap-3">
                             <a href="<%= request.getContextPath() %>/register"
-                                class="btn btn-primary fw-bold px-4 py-2.5 rounded-pill text-white shadow-sm">
+                                class="btn btn-primary fw-bold px-4 py-2.5 rounded-pill shadow-sm" style="background-color: #90EE90 !important; border-color: #90EE90 !important; color: #172017 !important;">
                                 Start Filing Form 941 &rarr;
                             </a>
                             <a href="<%= request.getContextPath() %>/login"
-                                class="btn btn-outline-light fw-semibold px-4 py-2.5 rounded-pill">
+                                class="btn btn-outline-light fw-semibold px-4 py-2.5 rounded-pill" style="border-color: rgba(255,255,255,0.3) !important; color: #FFFFFF !important;">
                                 Sign In to Account
                             </a>
                         </div>
 
                         <div class="d-flex align-items-center gap-4 mt-3 pt-1 text-slate-300 fs-7">
-                            <div><i class="fas fa-check-circle text-info me-1"></i> Instant IRS Receipt</div>
-                            <div><i class="fas fa-check-circle text-info me-1"></i> Free Retransmit</div>
-                            <div><i class="fas fa-check-circle text-info me-1"></i> 256-Bit Security</div>
+                            <div><i class="fas fa-check-circle me-1" style="color: #90EE90;"></i> Instant IRS Receipt</div>
+                            <div><i class="fas fa-check-circle me-1" style="color: #90EE90;"></i> Free Retransmit</div>
+                            <div><i class="fas fa-check-circle me-1" style="color: #90EE90;"></i> 256-Bit Security</div>
                         </div>
                     </div>
 
@@ -457,7 +451,7 @@
                     <div class="col-lg-6">
                         <div class="estimator-card-white">
                             <h4 class="estimator-card-title d-flex align-items-center gap-2">
-                                <i class="fas fa-calculator text-primary"></i> Form 941 Line-by-Line Estimator
+                                <i class="fas fa-calculator" style="color: #172017;"></i> Form 941 Line-by-Line Estimator
                             </h4>
                             <p class="estimator-card-subtitle">Instant Line 5a (Social Security) & Line 6 (Total Taxes)
                                 estimator.</p>

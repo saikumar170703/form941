@@ -6,16 +6,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Business Account - Form 941 E-File Portal</title>
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%= request.getContextPath() %>/css/style.css?v=5" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="<%= request.getContextPath() %>/css/style.css?v=6" rel="stylesheet">
+
+    <style>
+        .form-field-wrapper {
+            position: relative;
+            margin-bottom: 14px;
+        }
+        .form-field-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .form-control-custom {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 9px 40px 9px 12px;
+            font-size: 0.92rem;
+            color: #0F172A;
+            transition: all 0.2s ease;
+        }
+        .form-control-custom:focus {
+            border-color: #90EE90;
+            box-shadow: 0 0 0 3px rgba(144, 238, 144, 0.45);
+            outline: none;
+        }
+        .input-right-icon {
+            position: absolute;
+            right: 12px;
+            bottom: 11px;
+            color: #667066;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+        .input-right-icon.interactive {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        .btn-create-account {
+            background-color: #90EE90;
+            border: 1px solid #90EE90;
+            color: #172017;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(23, 32, 23, 0.06);
+        }
+        .btn-create-account:hover {
+            background-color: #76E076;
+            border-color: #76E076;
+            color: #172017;
+            transform: translateY(-1px);
+        }
+        .btn-google-signup {
+            border: 1px solid #CBD5E1;
+            background-color: #FFFFFF;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            padding: 9px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+        .btn-google-signup:hover {
+            background-color: #F8FAFC;
+            border-color: #94A3B8;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid p-0 login-container">
         <div class="row g-0 h-100">
             
-            <!-- Left Side Branding Hero Section -->
+            <!-- Left Side Branding Hero Section (MATCHING LOGIN PAGE) -->
             <div class="col-lg-6 login-left-hero d-none d-lg-flex">
+                <!-- Top Brand Header -->
                 <div class="d-flex align-items-center gap-3">
                     <div style="background: rgba(255,255,255,0.15); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -31,6 +109,7 @@
                     </div>
                 </div>
 
+                <!-- Hero Content Body -->
                 <div class="my-auto py-2" style="max-width: 480px; z-index: 2;">
                     <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill px-3 py-1.5 fw-semibold mb-2" style="background: rgba(99, 102, 241, 0.25) !important; color: #A5B4FC !important; font-size: 0.75rem;">
                         🏢 Business E-Filing Account
@@ -69,140 +148,110 @@
                     </div>
                 </div>
 
+                <!-- Footer note -->
                 <div class="d-flex align-items-center justify-content-between text-white-50 small border-top pt-2" style="border-color: rgba(255,255,255,0.12) !important; font-size: 0.75rem;">
                     <span>© 2026 e-File941 Portal</span>
                     <span>IRS Security Compliant</span>
                 </div>
             </div>
 
-            <!-- Right Side Registration Form -->
+            <!-- Right Side Registration Form Section (EXACT 4 FIELDS & TAXBANDITS STYLE) -->
             <div class="col-lg-6 login-right-form">
-                <div class="register-box my-auto">
+                <div class="register-box my-auto" style="max-width: 440px; width: 100%;">
+                    
                     <div class="text-center mb-3">
-                        <div class="d-inline-flex align-items-center justify-content-center mb-2 d-lg-none" style="background: #4F46E5; width: 42px; height: 42px; border-radius: 10px; color: white;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" />
-                            </svg>
-                        </div>
-                        <h4 class="fw-extrabold text-dark mb-1" style="font-size: 1.45rem;">Create Business Account</h4>
-                        <p class="text-muted small m-0" style="font-size: 0.8rem;">Set up your credentials for Form 941 electronic filing</p>
+                        <h4 class="fw-extrabold text-dark mb-1" style="font-size: 1.5rem;">Create Your Account</h4>
+                        <p class="text-muted small m-0" style="font-size: 0.82rem;">
+                            Account Type: <strong class="text-dark">Business Owner</strong> 
+                            <a href="#" class="ms-1" style="color: #2563EB; font-weight: 600; text-decoration: none;">Change</a>
+                        </p>
                     </div>
 
                     <!-- Error Alert -->
                     <c:if test="${not empty error}">
-                        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-2.5 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444 !important; font-size: 0.8rem;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            <span class="fw-semibold"><c:out value="${error}" /></span>
+                        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 rounded-3 border-0 shadow-sm" role="alert" style="background-color: #FEF2F2; color: #991B1B; border-left: 4px solid #EF4444 !important; font-size: 0.82rem;">
+                            <i class="fas fa-exclamation-circle text-danger"></i>
+                            <span><c:out value="${error}" /></span>
                         </div>
                     </c:if>
 
-                    <form action="<%= request.getContextPath() %>/register" method="POST" id="registerForm" onsubmit="return validateRegistrationForm()">
-                        <!-- Full Name -->
-                        <div class="mb-2.5">
-                            <label for="name" class="form-label fw-bold text-dark small mb-1">Full Name / Contact Person <span class="text-danger">*</span></label>
-                            <div class="input-icon-group">
-                                <span class="input-icon">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </span>
-                                <input type="text" class="form-control py-2" id="name" name="name" placeholder="e.g. Jane Doe" required autofocus>
+                    <!-- Registration Form with EXACT 4 Specified Fields -->
+                    <form action="<%= request.getContextPath() %>/register" method="POST" id="registerForm">
+                        
+                        <!-- Field 1: Email -->
+                        <div class="form-field-wrapper">
+                            <label for="email" class="form-field-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-custom" placeholder="name@example.com" required autofocus oninput="validateEmailField(this)">
+                            <i class="far fa-envelope input-right-icon"></i>
+                            <div id="emailFeedback" class="invalid-feedback text-start" style="display: none; color: #DC2626; font-size: 0.76rem; margin-top: 4px;">
+                                Please enter a valid email address (e.g. user@domain.com).
                             </div>
                         </div>
 
-                        <!-- Business Name & EIN Row -->
-                        <div class="row g-2 mb-2.5">
-                            <div class="col-md-7">
-                                <label for="businessName" class="form-label fw-bold text-dark small mb-1">Business Name</label>
-                                <div class="input-icon-group">
-                                    <span class="input-icon">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M3 21h18M3 7v14M21 7v14M6 10h4M6 14h4M6 18h4M14 10h4M14 14h4M14 18h4M9 3h6v4H9z"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control py-2" id="businessName" name="businessName" placeholder="Acme Enterprises LLC">
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <label for="ein" class="form-label fw-bold text-dark small mb-1">EIN</label>
-                                <div class="input-icon-group">
-                                    <span class="input-icon">
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                                            <path d="M7 15h4M15 15h2M7 11h2M13 11h4"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="text" class="form-control py-2 font-monospace" id="ein" name="ein" placeholder="12-3456789" maxlength="10" oninput="formatEinInput(this)">
-                                </div>
+                        <!-- Field 2: Contact name -->
+                        <div class="form-field-wrapper">
+                            <label for="name" class="form-field-label">Contact name</label>
+                            <input type="text" id="name" name="name" class="form-control form-control-custom" placeholder="" required>
+                            <i class="far fa-user input-right-icon"></i>
+                        </div>
+
+                        <!-- Field 3: Password -->
+                        <div class="form-field-wrapper">
+                            <label for="password" class="form-field-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control form-control-custom" placeholder="" required>
+                            <i class="far fa-eye input-right-icon interactive" id="togglePasswordIcon" onclick="togglePasswordVisibility()" title="Show/Hide Password"></i>
+                        </div>
+
+                        <!-- Field 4: Phone number -->
+                        <div class="form-field-wrapper">
+                            <label for="phone" class="form-field-label">Phone number</label>
+                            <input type="tel" id="phone" name="phone" class="form-control form-control-custom" placeholder="(123) 456-7890" maxlength="14" oninput="formatPhoneNumber(this)">
+                            <i class="fas fa-phone input-right-icon"></i>
+                            <div id="phoneFeedback" class="invalid-feedback text-start" style="display: none; color: #DC2626; font-size: 0.76rem; margin-top: 4px;">
+                                Please enter a valid 10-digit phone number.
                             </div>
                         </div>
 
-                        <!-- Email / Username -->
-                        <div class="mb-2.5">
-                            <label for="email" class="form-label fw-bold text-dark small mb-1">Work Email (Username) <span class="text-danger">*</span></label>
-                            <div class="input-icon-group">
-                                <span class="input-icon">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                </span>
-                                <input type="email" class="form-control py-2" id="email" name="email" placeholder="name@company.com" required>
-                            </div>
-                        </div>
-
-                        <!-- Password & Confirm Password Row -->
-                        <div class="row g-2 mb-2.5">
-                            <div class="col-md-6">
-                                <label for="password" class="form-label fw-bold text-dark small mb-1">Password <span class="text-danger">*</span></label>
-                                <div class="input-icon-group">
-                                    <span class="input-icon">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="password" class="form-control py-2" id="password" name="password" placeholder="••••••••" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="confirmPassword" class="form-label fw-bold text-dark small mb-1">Confirm Password <span class="text-danger">*</span></label>
-                                <div class="input-icon-group">
-                                    <span class="input-icon">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                        </svg>
-                                    </span>
-                                    <input type="password" class="form-control py-2" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Terms Checkbox -->
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
-                            <label class="form-check-label text-muted small cursor-pointer" for="termsCheck" style="font-size: 0.78rem;">
-                                I agree to the <a href="#" class="text-decoration-none" style="color: var(--primary-indigo);">Terms of Service</a> & <a href="#" class="text-decoration-none" style="color: var(--primary-indigo);">IRS E-File Privacy Policy</a>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm rounded-3 fw-bold" style="font-size: 0.95rem;">
-                            Create Account & Continue &rarr;
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-create-account shadow-sm mt-2">
+                            Create Account
                         </button>
-
-                        <div class="text-center mt-2.5">
-                            <p class="text-muted small m-0" style="font-size: 0.8rem;">
-                                Already have an account? 
-                                <a href="<%= request.getContextPath() %>/login" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Sign In</a>
-                            </p>
-                        </div>
                     </form>
+
+                    <!-- Divider -->
+                    <div class="my-3 text-center position-relative">
+                        <hr class="text-muted opacity-25 my-3">
+                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-semibold">Or create account with</span>
+                    </div>
+
+                    <!-- Google Sign Up Button -->
+                    <a href="<%= request.getContextPath() %>/auth/google/login" class="btn btn-google-signup mb-3 shadow-sm text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        Sign Up with Google
+                    </a>
+
+                    <!-- Footer Consent Text -->
+                    <div class="text-center text-muted mt-3" style="font-size: 0.76rem; line-height: 1.45;">
+                        <p class="mb-1">
+                            By creating an account, you agree to our <a href="#" style="color: #2563EB; text-decoration: underline;">Terms and Conditions</a>
+                        </p>
+                        <p class="mb-0">
+                            You also agree to receive emails regarding your tax return status, IRS notifications, and upcoming deadlines from eFile941. Read our <a href="#" style="color: #2563EB; text-decoration: underline;">Privacy Policy</a>.
+                        </p>
+                    </div>
+
+                    <div class="text-center mt-3 pt-1">
+                        <p class="text-muted small m-0" style="font-size: 0.82rem;">
+                            Already have an account? 
+                            <a href="<%= request.getContextPath() %>/login" class="text-decoration-none fw-bold" style="color: #2563EB;">Sign In</a>
+                        </p>
+                    </div>
+
                 </div>
             </div>
 
@@ -211,30 +260,86 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript Functions -->
     <script>
-        function formatEinInput(input) {
-            let val = input.value.replace(/\D/g, '');
-            if (val.length > 2) {
-                input.value = val.substring(0, 2) + '-' + val.substring(2, 9);
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             } else {
-                input.value = val;
+                passInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         }
 
-        function validateRegistrationForm() {
-            const pass = document.getElementById('password').value;
-            const confirmPass = document.getElementById('confirmPassword').value;
-
-            if (pass !== confirmPass) {
-                alert('Passwords do not match. Please re-enter passwords.');
+        function validateEmailField(input) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const feedback = document.getElementById('emailFeedback');
+            if (input.value.trim() !== '' && !emailRegex.test(input.value.trim())) {
+                input.style.borderColor = '#EF4444';
+                if (feedback) feedback.style.display = 'block';
                 return false;
+            } else {
+                input.style.borderColor = '#D1D5DB';
+                if (feedback) feedback.style.display = 'none';
+                return true;
             }
-            if (pass.length < 6) {
-                alert('Password must be at least 6 characters long.');
-                return false;
-            }
-            return true;
         }
+
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 10) value = value.substring(0, 10);
+            
+            let formatted = '';
+            if (value.length > 0) {
+                formatted = '(' + value.substring(0, Math.min(3, value.length));
+            }
+            if (value.length >= 4) {
+                formatted += ') ' + value.substring(3, Math.min(6, value.length));
+            }
+            if (value.length >= 7) {
+                formatted += '-' + value.substring(6, 10);
+            }
+            input.value = formatted;
+
+            const feedback = document.getElementById('phoneFeedback');
+            if (value.length > 0 && value.length < 10) {
+                input.style.borderColor = '#EF4444';
+                if (feedback) feedback.style.display = 'block';
+            } else {
+                input.style.borderColor = '#D1D5DB';
+                if (feedback) feedback.style.display = 'none';
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            
+            let isValid = true;
+
+            if (!validateEmailField(emailInput)) {
+                isValid = false;
+            }
+
+            if (phoneInput && phoneInput.value.trim() !== '') {
+                const digits = phoneInput.value.replace(/\D/g, '');
+                if (digits.length < 10) {
+                    phoneInput.style.borderColor = '#EF4444';
+                    document.getElementById('phoneFeedback').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>

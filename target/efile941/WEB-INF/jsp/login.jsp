@@ -8,7 +8,7 @@
     <title>Sign In - Form 941 E-File Portal</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%= request.getContextPath() %>/css/style.css?v=4" rel="stylesheet">
+    <link href="<%= request.getContextPath() %>/css/style.css?v=20" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid p-0 login-container">
@@ -34,7 +34,7 @@
 
                 <!-- Hero Content Body -->
                 <div class="my-auto py-2" style="max-width: 480px; z-index: 2;">
-                    <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill px-3 py-1.5 fw-semibold mb-2" style="background: rgba(99, 102, 241, 0.25) !important; color: #A5B4FC !important; font-size: 0.75rem;">
+                    <span class="badge rounded-pill px-3 py-1.5 fw-bold mb-2" style="background: #F1FFF1 !important; color: #172017 !important; border: 1px solid #90EE90 !important; font-size: 0.75rem;">
                         ✨ Next-Gen Tax Preparation
                     </span>
                     <h2 class="fw-extrabold text-white mb-2" style="letter-spacing: -0.02em; line-height: 1.2; font-size: 1.85rem;">
@@ -161,17 +161,85 @@
                         <button type="submit" class="btn btn-primary w-100 py-2.5 shadow-sm rounded-3 fw-bold" style="font-size: 0.95rem;">
                             Sign In to Portal &rarr;
                         </button>
-
-                        <div class="text-center mt-3">
-                            <p class="text-muted small m-0" style="font-size: 0.8rem;">
-                                Don't have an account? 
-                                <a href="<%= request.getContextPath() %>/register" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Create Business Account</a>
-                            </p>
-                        </div>
                     </form>
+
+                    <!-- Google Sign In Button -->
+                    <div class="my-3 text-center position-relative">
+                        <hr class="text-muted opacity-25 my-3">
+                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small fw-semibold">Or sign in with</span>
+                    </div>
+
+                    <a href="<%= request.getContextPath() %>/auth/google/login" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm text-decoration-none" style="border-color: #D1D5DB; background: #FFFFFF; color: #374151;">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        Sign In with Google
+                    </a>
+
+                    <div class="text-center mt-3">
+                        <p class="text-muted small m-0" style="font-size: 0.8rem;">
+                            Don't have an account? 
+                            <a href="<%= request.getContextPath() %>/register" class="text-decoration-none fw-bold" style="color: var(--primary-indigo);">Create Business Account</a>
+                        </p>
+                    </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- GOOGLE ACCOUNTS CHOOSER MODAL FOR LOGIN -->
+    <div class="modal fade" id="googleLoginAccountModal" tabindex="-1" aria-labelledby="googleLoginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-bottom-0 pb-1 pt-4 px-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <h6 class="modal-title fw-bold text-dark m-0" id="googleLoginModalLabel">Sign in with Google</h6>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pt-2 pb-4">
+                    <p class="text-muted fs-7 mb-3">Choose an account to continue to <strong class="text-dark">eFile941 Portal</strong></p>
+                    
+                    <div class="p-2 border rounded-3 mb-2 cursor-pointer bg-light hover-shadow" onclick="submitGoogleLogin('admin@efile941.com', 'Admin User')">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">A</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark fs-7">Admin User</h6>
+                                <span class="text-muted fs-7">admin@efile941.com</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 border rounded-3 mb-2 cursor-pointer bg-light hover-shadow" onclick="submitGoogleLogin('user@gmail.com', 'Tax Filer')">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-danger text-white fw-bold d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">U</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark fs-7">Tax Filer</h6>
+                                <span class="text-muted fs-7">user@gmail.com</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 border rounded-3 cursor-pointer bg-light hover-shadow" onclick="promptCustomGoogleLogin()">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-white border text-secondary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;"><i class="fas fa-user-plus fs-7"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-semibold text-primary fs-7">Use another Gmail account</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -181,11 +249,43 @@
         function togglePasswordVisibility() {
             const passInput = document.getElementById('password');
             if (passInput) {
-                if (passInput.type === 'password') {
-                    passInput.type = 'text';
-                } else {
-                    passInput.type = 'password';
-                }
+                passInput.type = (passInput.type === 'password') ? 'text' : 'password';
+            }
+        }
+
+        function openGoogleOAuthPopupWindow() {
+            const width = 500;
+            const height = 620;
+            const left = Math.max(0, (window.screen.width / 2) - (width / 2));
+            const top = Math.max(0, (window.screen.height / 2) - (height / 2));
+
+            const popup = window.open(
+                '<%= request.getContextPath() %>/auth/google/popup',
+                'Sign in - Google Accounts',
+                'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left + ',scrollbars=yes,status=yes,resizable=yes'
+            );
+
+            if (!popup) {
+                alert('Please allow popups to sign in with Google.');
+            }
+        }
+
+        function triggerGoogleLogin() {
+            openGoogleOAuthPopupWindow();
+        }
+
+        function submitGoogleLogin(email, name) {
+            if (!email) return;
+            document.getElementById('googleEmailLoginInput').value = email.trim();
+            document.getElementById('googleNameLoginInput').value = name ? name.trim() : email.split('@')[0];
+            document.getElementById('googleLoginForm').submit();
+        }
+
+        function promptCustomGoogleLogin() {
+            let email = prompt("Enter your Gmail address:", "user@gmail.com");
+            if (email && email.trim() !== "") {
+                let name = email.includes("@") ? email.split("@")[0] : "Google User";
+                submitGoogleLogin(email, name);
             }
         }
     </script>

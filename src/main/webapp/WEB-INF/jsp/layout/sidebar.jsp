@@ -9,18 +9,18 @@
 <div class="sidebar d-flex flex-column flex-shrink-0" id="mainSidebar">
     <div class="p-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: rgba(226,232,240,0.8) !important;">
         <div class="d-flex align-items-center gap-2">
-            <div style="background: #2563EB; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <div style="background: #90EE90; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #76E076;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M14 2V8H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M16 13H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M16 17H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M10 9H9H8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="#172017" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M14 2V8H20" stroke="#172017" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M16 13H8" stroke="#172017" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M16 17H8" stroke="#172017" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M10 9H9H8" stroke="#172017" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
             <div>
                 <h5 class="m-0 text-dark" style="font-weight: 700; line-height: 1.2;">e-File941</h5>
-                <small style="color: #64748b; font-size: 0.72rem;">IRS eFile Portal</small>
+                <small style="color: var(--text-secondary); font-size: 0.72rem;">IRS eFile Portal</small>
             </div>
         </div>
         <!-- Close button for Mobile Screen -->
@@ -82,14 +82,14 @@
         </li>
     </ul>
 
-    <div class="p-3 mx-2 mb-3 glass-panel" style="border-radius: 12px; text-align: center;">
-        <div style="background: rgba(37, 99, 235, 0.15); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #2563EB;">
+    <div class="p-3 mx-2 mb-3 glass-panel" style="border-radius: 12px; text-align: center; background: #F1FFF1 !important; border: 1px solid #90EE90 !important;">
+        <div style="background: #90EE90; width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; color: #172017;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
         </div>
-        <h6 class="fw-bold" style="color: var(--text-dark); margin-bottom: 4px;">Need Help?</h6>
-        <p class="text-muted" style="font-size: 0.78rem; margin-bottom: 12px;">IRS Form 941 eFile Portal</p>
+        <h6 class="fw-bold" style="color: #172017; margin-bottom: 4px;">Need Help?</h6>
+        <p style="color: #667066; font-size: 0.78rem; margin-bottom: 12px;">IRS Form 941 eFile Portal</p>
     </div>
 
     <div class="p-3 border-top d-flex align-items-center gap-2 text-muted justify-content-center" style="border-color: rgba(226,232,240,0.8) !important; font-size: 0.85rem;">

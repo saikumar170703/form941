@@ -5,6 +5,7 @@ com\company\irs941\controller\AuditController.class
 com\company\irs941\model\UserRole.class
 com\company\irs941\dao\UserDao.class
 com\company\irs941\mef\MefSubmissionPackager.class
+com\company\irs941\config\GlobalExceptionHandler.class
 com\company\irs941\controller\AccountController.class
 com\company\irs941\model\TaxRate.class
 com\company\irs941\dao\Form941Dao.class
@@ -34,6 +35,7 @@ com\company\irs941\dto\PaymentRequestDTO.class
 com\company\irs941\service\EFileSubmissionService.class
 com\company\irs941\model\Form941Line.class
 com\company\irs941\model\Form941ScheduleB.class
+com\company\irs941\filter\RequestLoggingFilter.class
 com\company\irs941\config\AppConfig.class
 com\company\irs941\model\AuditLog.class
 com\company\irs941\dao\PaymentDao.class
@@ -59,3 +61,4 @@ com\company\irs941\validator\Form941Validator$ValidationWarning.class
 com\company\irs941\validator\Form941Validator$ValidationResult.class
 com\company\irs941\controller\AuthController.class
 com\company\irs941\dao\TaxRateDao.class
+com\company\irs941\config\TimezoneInitializerListener.class
